@@ -1,0 +1,42 @@
+tag: [default]
+priority: 99
+type: similarity
+break: ["-", "_", ".", "{Cap}"]
+expression: ["{-1}.*"]
+
+// example.component.ts, example.component.html, example.component.css
+tag: ["Typescript"]
+priority: 1
+type: expression
+break: ["-", "."]
+expression: ["{1}.component.*"]
+
+// example.service.ts, example.component.ts
+tag: [Typescript]
+priority: 2
+type: similarity
+break: "-", "."
+expression: ["{1}.{-1}.{2}"]
+
+
+// IExample.cs, Example.cs
+tag: [C#]
+priority: 1
+type: expression
+break: "{Cap}"
+expression: ["I{1}.*", "{1}.*"]
+
+// ExampleController.cs, ExampleLogic.cs, ExampleRepository.cs
+tag: [C#]
+priority: 1
+type: expression
+break: "{Cap}"
+expression: ["{1}Controller*", "{1}Logic*", "{1}Repository*"]
+
+
+// ExampleController.h, ExampleController.cpp
+tag: [C++]
+priority: 1
+type: expression
+break: "{Cap}"
+expression: [{1}.*]

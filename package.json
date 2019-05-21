@@ -10,16 +10,121 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onCommand:extension.openRelatedFile"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+		"commands": [{
+			"command": "extension.openRelatedFile",
+			"title": "Open Related File"
+		}],
+		"keybindings": [{
+			"command": "extension.openRelatedFile",
+			"key": "ctrl+;",
+			"when": "editorTextFocus"
+		}],
+		"configuration": [{
+			"title": "Smart Open",
+			"properties": {
+				"smartOpen.activatedTags": {
+					"type": "array",
+					"items": {
+						"tag": {
+							"type": "string",
+							"examples": ["default"],
+							"description": "Rule tags"
+						}
+					},
+					"uniqueItems": true,
+					"default": ["default"],
+					"description": "Current activated tags from defined rules. Multiple rule can be applied"
+				},
+				"smartOpen.rules.default": {
+					"type": "object",
+					"properties": {
+						"tag": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"uniqueItems": true,
+							"description": "Use to identify the rule"
+						},
+						"order": {
+							"type": "integer",
+							"default": 1,
+							"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule"
+						},
+						"break": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"examples": ["-", "_", ".", "{Cap}"]
+							},
+							"uniqueItems": true,
+							"default": ["-", "_", ".", "{Cap}"],
+							"description": "The character that breaks in the file path"
+						},
+						"expression": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Expression to match file names"
+						}
+					},
+					"required": ["tag", "expression"],
+					"default": {
+						"tag": ["default"],
+						"order": 999,
+						"break": ["-", "_", ".", "{Cap}"],
+						"expression": ["{-1}.*"]
+					},
+					"description": "General rules can apply to any projects"
+				},
+				"smartOpen.rules.custom": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"tag": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"uniqueItems": true,
+								"description": "Use to identify the rule"
+							},
+							"order": {
+								"type": "integer",
+								"default": 1,
+								"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule"
+							},
+							"break": {
+								"type": "array",
+								"items": {
+									"type": "string",
+									"examples": ["-", "_", ".", "{Cap}"]
+								},
+								"uniqueItems": true,
+								"default": ["-", "_", ".", "{Cap}"],
+								"description": "The character that breaks in the file path"
+							},
+							"expression": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "Expression to match file names"
+							}
+						},
+						"required": ["tag", "expression"],
+						"description": "Rule object"
+					},
+					"description": "Custom rules. Don't forget add this into activatedTags to enable it"
+				}
 			}
-		]
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -29,10 +134,11 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28",
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^10.14.4",
 		"tslint": "^5.12.1",
-		"@types/node": "^10.12.21",
-		"@types/mocha": "^2.2.42"
-	}
+		"typescript": "^3.3.1",
+		"vscode": "^1.1.28"
+	},
+	"dependencies": {}
 }
