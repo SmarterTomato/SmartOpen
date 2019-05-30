@@ -1,6 +1,6 @@
-// import { Rule } from "./rule";
+import { Rule } from "./rule";
 
-// class Config{
-//     activatedTags: string[] = [];
-//     default: Rule;
-// }
+export class Config {
+    activatedTags = new Array<string>();
+    rules = new Array<Rule>();
+}

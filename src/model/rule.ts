@@ -1,6 +1,6 @@
 export class Rule {
-    tag: string[] = [];
+    tags = new Array<string>();
     order: number = 0;
-    break: string[] = [];
-    expression: string[]
+    breakChars = new Array<string>();
+    expressions = new Array<string>();
 }

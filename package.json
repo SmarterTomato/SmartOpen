@@ -10,16 +10,16 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.openRelatedFile"
+		"onCommand:smartOpen.openRelatedFile"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [{
-			"command": "extension.openRelatedFile",
+			"command": "smartOpen.openRelatedFile",
 			"title": "Open Related File"
 		}],
 		"keybindings": [{
-			"command": "extension.openRelatedFile",
+			"command": "smartOpen.openRelatedFile",
 			"key": "ctrl+;",
 			"when": "editorTextFocus"
 		}],
@@ -29,7 +29,7 @@
 				"smartOpen.activatedTags": {
 					"type": "array",
 					"items": {
-						"tag": {
+						"tags": {
 							"type": "string",
 							"examples": ["default"],
 							"description": "Rule tags"
@@ -42,7 +42,7 @@
 				"smartOpen.rules.default": {
 					"type": "object",
 					"properties": {
-						"tag": {
+						"tags": {
 							"type": "array",
 							"items": {
 								"type": "string"
@@ -55,7 +55,7 @@
 							"default": 1,
 							"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule"
 						},
-						"break": {
+						"breakChars": {
 							"type": "array",
 							"items": {
 								"type": "string",
@@ -65,20 +65,20 @@
 							"default": ["-", "_", ".", "{Cap}"],
 							"description": "The character that breaks in the file path"
 						},
-						"expression": {
+						"expressions": {
 							"type": "array",
 							"items": {
 								"type": "string"
 							},
-							"description": "Expression to match file names"
+							"description": "Expressions to match file names"
 						}
 					},
-					"required": ["tag", "expression"],
+					"required": ["tags", "expressions"],
 					"default": {
-						"tag": ["default"],
+						"tags": ["default"],
 						"order": 999,
-						"break": ["-", "_", ".", "{Cap}"],
-						"expression": ["{-1}.*"]
+						"breakChars": ["-", "_", ".", "{Cap}"],
+						"expressions": ["{-2}.*"]
 					},
 					"description": "General rules can apply to any projects"
 				},
@@ -87,7 +87,7 @@
 					"items": {
 						"type": "object",
 						"properties": {
-							"tag": {
+							"tags": {
 								"type": "array",
 								"items": {
 									"type": "string"
@@ -100,7 +100,7 @@
 								"default": 1,
 								"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule"
 							},
-							"break": {
+							"breakChars": {
 								"type": "array",
 								"items": {
 									"type": "string",
@@ -110,15 +110,15 @@
 								"default": ["-", "_", ".", "{Cap}"],
 								"description": "The character that breaks in the file path"
 							},
-							"expression": {
+							"expressions": {
 								"type": "array",
 								"items": {
 									"type": "string"
 								},
-								"description": "Expression to match file names"
+								"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}"
 							}
 						},
-						"required": ["tag", "expression"],
+						"required": ["tags", "expressions"],
 						"description": "Rule object"
 					},
 					"description": "Custom rules. Don't forget add this into activatedTags to enable it"

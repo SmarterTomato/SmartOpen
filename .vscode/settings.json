@@ -12,5 +12,15 @@
     "prettier.tabWidth": 4,
     "prettier.trailingComma": "all",
     "prettier.printWidth": 120,
-    "editor.rulers": [120],
+    "editor.rulers": [
+        120
+    ],
+    "cSpell.words": [
+        "inversify",
+        "js",
+        "smartopen"
+    ],
+
+    "editor.formatOnPaste": false,
+    "auto-close-tag.enableAutoCloseTag": false
 }

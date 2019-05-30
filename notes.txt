@@ -40,3 +40,24 @@ priority: 1
 type: expression
 break: "{Cap}"
 expression: [{1}.*]
+
+
+^.{1,}\.component\..{1,}$
+
+app.component.ts
+app.component.html
+app.component.css
+.component.css
+app.componentcss
+app.component.
+
+.component.css
+
+
+{[^}]*}
+
+"{-1}.*"
+
+"{1}.component.*"
+
+"{1}.{-1}.{2}"
