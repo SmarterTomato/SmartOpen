@@ -15,21 +15,32 @@ class FileService {
             // Don't do anything if not text editor for now
             // List all files later if needed
             // This should not happen right now due to the shortcut binding
+            vscode.window.showInformationMessage(`Open related file activated, but no active text editor`);
+            console.log(`Open related file activated, but no active text editor`);
             return;
         }
         let workspaceFolder = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
         if (!workspaceFolder) {
+            vscode.window.showInformationMessage(`Active text editor not belongs to workspace`);
+            console.log(`Active text editor not belongs to workspace`);
             return;
         }
+
+        console.debug(`Getting active file`);
 
         let name = path.basename(activeTextEditor.document.fileName);
         let relativePath = path.relative(workspaceFolder.uri.fsPath, activeTextEditor.document.fileName);
         let activeFile = new FileInfoItem(name, activeTextEditor.document.fileName, relativePath);
+        console.debug(`Active file >>> ${JSON.stringify(activeFile)}`);
 
         let fileInfos = this.getAllFilesInCurrentWorkspace();
+
         let relatedFiles = this.getRelatedFiles(activeFile, fileInfos);
 
+        // ! Disabled due to performance issue
+        console.debug(`Sorting`);
         relatedFiles = relatedFiles.sort(x => x.rule.order);
+
         this.showQuickPick(activeFile, relatedFiles);
     }
 
@@ -39,15 +50,7 @@ class FileService {
      * @param relatedFiles
      */
     private showQuickPick(activeFile: FileInfoItem, relatedFiles: Array<FileInfoItem>) {
-        // let array = ["1", "12", "3", "4"];
-        // vscode.window.showQuickPick(array);
-        // let pick = vscode.window.createQuickPick();
-        // pick.items = [{ label: "1" }, { label: "12" }, { label: "13" }, { label: "4" }];
-        // pick.show();
-        // setTimeout(() => {
-        //     pick.items = [{label: "15"}, {label: "6"}, {label: "13"}, {label: "14"}];
-        // }, 5000);
-
+        console.debug(`Showing pick dialog for ${relatedFiles.length} files`);
 
         let placeHolder = `Related files to ${activeFile.name}...`;
 
@@ -55,9 +58,10 @@ class FileService {
             placeHolder = `No files found related to ${activeFile.name}...`;
         }
 
-        vscode.window.showQuickPick(relatedFiles, { placeHolder: placeHolder}).then(selected => {
+        vscode.window.showQuickPick(relatedFiles, { placeHolder: placeHolder }).then(selected => {
             if (selected) {
                 vscode.workspace.openTextDocument(selected.fullPath).then(document => {
+                    console.debug(`Open document >>> ${selected.relativePath}`);
                     vscode.window.showTextDocument(document);
                 });
             }
@@ -70,12 +74,31 @@ class FileService {
      * @param files
      */
     private getRelatedFiles(activeFile: FileInfoItem, files: Array<FileInfoItem>): Array<FileInfoItem> {
+        console.debug(`Getting related files`);
+
         let relatedFiles = new Array<FileInfoItem>();
 
+        let rules = configService.getActivatedRules();
         for (let file of files) {
-            if (activeFile.fullPath !== file.fullPath) {
-                if (this.matchFiles(activeFile, file, configService.getActivatedRules())) {
-                    relatedFiles.push(file);
+            for (let rule of rules) {
+                activeFile.reset();
+                activeFile.setRule(rule);
+                ruleLogic.analysisFile(activeFile);
+                // - If the current file not match to the rule, ignore
+                if (!activeFile.isMatch) {
+                    continue;
+                }
+
+                if (activeFile.fullPath !== file.fullPath) {
+                    file.reset();
+                    file.setRule(rule);
+                    ruleLogic.analysisFile(file);
+
+                    if (file.isMatch && ruleLogic.areFileInfosMatch(activeFile, file)) {
+                        relatedFiles.push(file);
+                        console.debug(`Found match >>> ${JSON.stringify(file)}`);
+                        break;
+                    }
                 }
             }
         }
@@ -83,27 +106,12 @@ class FileService {
         return relatedFiles;
     }
 
-    private matchFiles(activeFile: FileInfoItem, file: FileInfoItem, rules: Array<Rule>): boolean {
-        for (const rule of rules) {
-            activeFile.rule = rule;
-            ruleLogic.analysisFile(activeFile);
-            // - If the current file not match to the rule, ignore
-            if (!activeFile.isMatch) {
-                continue;
-            }
-
-            file.rule = rule;
-            ruleLogic.analysisFile(file);
-            if (file.isMatch && ruleLogic.areFileInfosMatch(activeFile, file)) {
-                return true;
-            }
-        }
-    }
-
     /**
      * Get all file informations in current workspace as QuickPickItem
      */
     private getAllFilesInCurrentWorkspace(): Array<FileInfoItem> {
+        console.debug(`Get all files in workspace`);
+
         let results = new Array<FileInfoItem>();
 
         // Only scan file in current workspace
@@ -121,6 +129,7 @@ class FileService {
             }
         }
 
+        console.debug(`Files count >>> ${results.length}`);
         return results;
     }
 

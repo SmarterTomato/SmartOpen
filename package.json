@@ -36,53 +36,10 @@
 						}
 					},
 					"uniqueItems": true,
-					"default": ["default"],
+					"default": ["all"],
 					"description": "Current activated tags from defined rules. Multiple rule can be applied"
 				},
-				"smartOpen.rules.default": {
-					"type": "object",
-					"properties": {
-						"tags": {
-							"type": "array",
-							"items": {
-								"type": "string"
-							},
-							"uniqueItems": true,
-							"description": "Use to identify the rule"
-						},
-						"order": {
-							"type": "integer",
-							"default": 1,
-							"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule"
-						},
-						"breakChars": {
-							"type": "array",
-							"items": {
-								"type": "string",
-								"examples": ["-", "_", ".", "{Cap}"]
-							},
-							"uniqueItems": true,
-							"default": ["-", "_", ".", "{Cap}"],
-							"description": "The character that breaks in the file path"
-						},
-						"expressions": {
-							"type": "array",
-							"items": {
-								"type": "string"
-							},
-							"description": "Expressions to match file names"
-						}
-					},
-					"required": ["tags", "expressions"],
-					"default": {
-						"tags": ["default"],
-						"order": 999,
-						"breakChars": ["-", "_", ".", "{Cap}"],
-						"expressions": ["{-2}.*"]
-					},
-					"description": "General rules can apply to any projects"
-				},
-				"smartOpen.rules.custom": {
+				"smartOpen.rules.builtIn": {
 					"type": "array",
 					"items": {
 						"type": "object",
@@ -97,7 +54,7 @@
 							},
 							"order": {
 								"type": "integer",
-								"default": 1,
+								"default": 10,
 								"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule"
 							},
 							"breakChars": {
@@ -115,7 +72,85 @@
 								"items": {
 									"type": "string"
 								},
-								"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}"
+								"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow"
+							}
+						},
+						"required": ["tags", "expressions"],
+						"description": "Rule object"
+					},
+					"description": "Custom rules. Don't forget add this into activatedTags to enable it",
+					"default": [{
+							"tags": ["Default"],
+							"order": 999,
+							"breakChars": ["-", "_", ".", "{Cap}"],
+							"expressions": ["{-2}.{1}"]
+						},
+						{
+							"tags": ["Typescript"],
+							"order": 11,
+							"breakChars": ["-", "."],
+							"expressions": ["{1}.component.*"]
+						},
+						{
+							"tags": ["Typescript"],
+							"order": 12,
+							"breakChars": ["-", "."],
+							"expressions": ["{1}.{-2}.*"]
+						},
+						{
+							"tags": ["C#"],
+							"order": 11,
+							"breakChars": ["{Cap}"],
+							"expressions": ["I{1}.cs", "{1}.cs"]
+						},
+						{
+							"tags": ["C#"],
+							"order": 12,
+							"breakChars": ["{Cap}"],
+							"expressions": ["{1}Controller.cs", "{1}Logic.cs", "{1}Repository.cs"]
+						},
+						{
+							"tags": ["C++"],
+							"order": 12,
+							"breakChars": ["{Cap}"],
+							"expressions": ["{1}.h", "{1}.cpp"]
+						}
+					]
+				},
+				"smartOpen.rules.custom": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"tags": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"uniqueItems": true,
+								"description": "Use to identify the rule"
+							},
+							"order": {
+								"type": "integer",
+								"default": 10,
+								"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule"
+							},
+							"breakChars": {
+								"type": "array",
+								"items": {
+									"type": "string",
+									"examples": ["-", "_", ".", "{Cap}"]
+								},
+								"uniqueItems": true,
+								"default": ["-", "_", ".", "{Cap}"],
+								"description": "The character that breaks in the file path"
+							},
+							"expressions": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow"
 							}
 						},
 						"required": ["tags", "expressions"],

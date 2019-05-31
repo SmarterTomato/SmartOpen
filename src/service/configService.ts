@@ -4,25 +4,32 @@ import { Config } from "../model/config";
 
 class ConfigService {
     get(): Config {
+        console.debug(`Loading configs`);
+
         let config = new Config();
         try {
             config.activatedTags = vscode.workspace.getConfiguration().get("smartOpen.activatedTags");
 
-            let defaultRule: Rule = vscode.workspace.getConfiguration().get("smartOpen.rules.default");
-            config.rules.push(defaultRule);
+            let builtIn: Array<Rule> = vscode.workspace.getConfiguration().get("smartOpen.rules.builtIn");
+            config.rules = builtIn;
 
             let custom: Array<Rule> = vscode.workspace.getConfiguration().get("smartOpen.rules.custom");
             config.rules = config.rules.concat(custom);
         } catch (error) {
-            console.exception(`Could not load configuration: ${error}`);
+            console.exception(`Could not load configurations: ${error.toString()}`);
         }
 
+        console.debug(`Configs loaded, ${config.rules} rules available`);
         return config;
     }
 
     getActivatedRules(): Array<Rule> {
         let config = this.get();
-        return config.rules.filter(x => x.tags.some(p => config.activatedTags.indexOf(p) >= 0));
+        if (config.activatedTags.includes("all")) {
+            return config.rules;
+        } else {
+            return config.rules.filter(x => x.tags.some(p => config.activatedTags.includes(p)));
+        }
     }
 }
 

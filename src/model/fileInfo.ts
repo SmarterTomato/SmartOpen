@@ -19,6 +19,16 @@ export class FileInfoItem implements QuickPickItem {
         this.label = name;
         this.description = relativePath;
     }
+
+    reset() {
+        this.isMatch = false;
+        this.rule = null;
+        this.segments = new Array<FileSegment>();
+    }
+
+    setRule(rule: Rule) {
+        this.rule = rule;
+    }
 }
 
 export class FileSegment {

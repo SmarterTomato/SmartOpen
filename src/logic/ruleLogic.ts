@@ -13,6 +13,8 @@ class RuleLogic {
      * @param rule
      */
     analysisFile(file: FileInfoItem) {
+        console.debug(`Analysing file >>> ${file.relativePath}`);
+
         let name = file.name;
 
         for (let expression of file.rule.expressions) {
@@ -44,7 +46,13 @@ class RuleLogic {
                     // - not match, try next expression
                     notMatch = true;
                     break;
-                } else if (start !== 0) {
+                } else if (start > 0) {
+                    if (!expressionVar) {
+                        // - not match, try next expression
+                        notMatch = true;
+                        break;
+                    }
+
                     // - start with variable
                     let value = name.substring(0, start);
                     let matchSegment: FileSegment = {
@@ -85,23 +93,27 @@ class RuleLogic {
 
             // * only the first match needed
             file.isMatch = true;
+            console.debug(`File matched Matched expression >>> ${expression}`);
             break;
         }
     }
 
     /**
      * Check weather the two results match each other
-     * @param result1
-     * @param result2
+     * @param file1
+     * @param file2
      */
-    areFileInfosMatch(result1: FileInfoItem, result2: FileInfoItem): boolean {
-        if (!result1.isMatch || !result2.isMatch) {
+    areFileInfosMatch(file1: FileInfoItem, file2: FileInfoItem): boolean {
+        console.debug(`Comparing file infos >>> file1=${file1.relativePath} | file2=${file2.relativePath}`);
+
+        if (!file1.isMatch || !file2.isMatch) {
+            // This shouldn't happen
             return false;
         }
 
         // - for {-1}
-        let variableSegments1 = result1.segments.filter(x => x.expression.match(this.expressionSimilarRegExp));
-        let variableSegments2 = result2.segments.filter(x => x.expression.match(this.expressionSimilarRegExp));
+        let variableSegments1 = file1.segments.filter(x => x.expression.match(this.expressionSimilarRegExp));
+        let variableSegments2 = file2.segments.filter(x => x.expression.match(this.expressionSimilarRegExp));
         for (const seg1 of variableSegments1) {
             for (const seg2 of variableSegments2) {
                 if (seg1.value === seg2.value) {
@@ -112,27 +124,32 @@ class RuleLogic {
                 let matchResult = seg1.expression.match(this.expressionSimilarRegExp)[0];
                 let max = Number(matchResult.substring(1, matchResult.length - 1)) * -1;
 
-                let array1 = this.breakString(seg1.value, result1.rule.breakChars);
-                let array2 = this.breakString(seg2.value, result2.rule.breakChars);
-                let count = this.calculateDifference(array1, array2).length;
+                let array1 = this.breakString(seg1.value, file1.rule.breakChars);
+                let array2 = this.breakString(seg2.value, file2.rule.breakChars);
+                let count = this.calculateDifference(array1, array2);
 
                 if (count > max) {
+                    console.debug(
+                        `Exceed the max allowed difference >>> seg1=${seg1.value} | seg2=${seg2.value} | max=${max}`,
+                    );
                     return false;
                 }
             }
         }
 
         // - for {1}
-        variableSegments1 = result1.segments.filter(x => x.expression.match(this.expressionConstantRegExp));
-        variableSegments2 = result2.segments.filter(x => x.expression.match(this.expressionConstantRegExp));
+        variableSegments1 = file1.segments.filter(x => x.expression.match(this.expressionConstantRegExp));
+        variableSegments2 = file2.segments.filter(x => x.expression.match(this.expressionConstantRegExp));
         for (const seg1 of variableSegments1) {
             for (const seg2 of variableSegments2) {
                 if (seg1.value !== seg2.value) {
+                    console.debug(`Segments are different >>> seg1=${seg1.value} | seg2=${seg2.value}`);
                     return false;
                 }
             }
         }
 
+        console.debug(`Files are matched`);
         return true;
     }
 
@@ -160,17 +177,13 @@ class RuleLogic {
         return result;
     }
 
-    private calculateDifference(array1: Array<string>, array2: Array<string>): Array<string> {
-        array1 = array1.filter((v, i, a) => a.indexOf(v) === i);
-        array2 = array2.filter((v, i, a) => a.indexOf(v) === i);
-
+    private calculateDifference(array1: Array<string>, array2: Array<string>): number {
+        let count = 0;
         let differ1 = array1.filter(x => !array2.includes(x));
         let differ2 = array2.filter(x => !array1.includes(x));
 
-        let differ = differ1.concat(differ2);
-        if (differ.length > 0) {
-            return differ;
-        }
+        count = differ1.length + differ2.length;
+        return count;
     }
 }
 
