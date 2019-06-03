@@ -7,9 +7,9 @@ Smart Open is a vscode extension help user better manage opened files
 ### Open related files
 
 Open related files using "Ctrl + ;"
-![alt](https://github.com/SmartyTomato/SmartOpen/blob/master/resources/img/readme/readme_1.jpg)
 
-## Requirements
+<img alt="Open related files"
+      src="https://github.com/SmartyTomato/SmartOpen/blob/master/resources/img/readme/readme_1.png">
 
 Just install from the Vscode extension marketplace
 
