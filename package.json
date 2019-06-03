@@ -2,7 +2,7 @@
 	"name": "smartopen",
 	"displayName": "SmartOpen",
 	"description": "SmartOpen is an extension opens related files in the project",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -10,7 +10,7 @@
 	"categories": [
 		"Other"
 	],
-	"icon": "resources/img/readme/readme_1.jpg",
+	"icon": "resources/img/logo.png",
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/smartytomato/smartopen/repository.git"
