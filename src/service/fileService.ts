@@ -37,7 +37,6 @@ class FileService {
 
         let relatedFiles = this.getRelatedFiles(activeFile, fileInfos);
 
-        // ! Disabled due to performance issue
         console.debug(`Sorting`);
         relatedFiles = relatedFiles.sort(x => x.rule.order);
 
@@ -78,7 +77,7 @@ class FileService {
 
         let relatedFiles = new Array<FileInfoItem>();
 
-        let rules = configService.getActivatedRules();
+        let rules = configService.getActivatedRules().sort(x => x.order);
         for (let file of files) {
             for (let rule of rules) {
                 activeFile.reset();

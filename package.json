@@ -6,9 +6,15 @@
 	"engines": {
 		"vscode": "^1.32.0"
 	},
+	"publisher": "smartytomato",
 	"categories": [
 		"Other"
 	],
+	"icon": "https://github.com/smartytomato/smartopen/resources/img/logo.png",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/smartytomato/smartopen/repository.git"
+	},
 	"activationEvents": [
 		"onCommand:smartOpen.openRelatedFile"
 	],
@@ -78,7 +84,7 @@
 						"required": ["tags", "expressions"],
 						"description": "Rule object"
 					},
-					"description": "Custom rules. Don't forget add this into activatedTags to enable it",
+					"description": "Builtin rules. Use as you wish, just add it into activated tags",
 					"default": [{
 							"tags": ["Default"],
 							"order": 999,
@@ -86,10 +92,10 @@
 							"expressions": ["{-2}.{1}"]
 						},
 						{
-							"tags": ["Typescript"],
+							"tags": ["Angular"],
 							"order": 11,
 							"breakChars": ["-", "."],
-							"expressions": ["{1}.component.*"]
+							"expressions": ["{1}.component.*", "{1}.Service.ts"]
 						},
 						{
 							"tags": ["Typescript"],
@@ -104,7 +110,7 @@
 							"expressions": ["I{1}.cs", "{1}.cs"]
 						},
 						{
-							"tags": ["C#"],
+							"tags": ["Controller, Logic, Repository"],
 							"order": 12,
 							"breakChars": ["{Cap}"],
 							"expressions": ["{1}Controller.cs", "{1}Logic.cs", "{1}Repository.cs"]
