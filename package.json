@@ -10,7 +10,7 @@
 	"categories": [
 		"Other"
 	],
-	"icon": "https://github.com/smartytomato/smartopen/resources/img/logo.png",
+	"icon": "resources/img/readme/readme_1.jpg",
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/smartytomato/smartopen/repository.git"
