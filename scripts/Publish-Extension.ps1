@@ -1,2 +1,2 @@
 # Publish extension
-Invoke-Expression "vsce publish minior"
+Invoke-Expression "vsce publish minor"
