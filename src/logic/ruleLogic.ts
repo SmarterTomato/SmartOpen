@@ -1,5 +1,5 @@
 import { Rule } from "../model/rule";
-import { FileInfoItem, SegmentType, FileSegment } from "../model/fileInfo";
+import { FileInfoItem, SegmentType, FileSegment, FileInfo, MatchResult } from "../model/fileInfo";
 
 class RuleLogic {
     wildcardRegExp = /[*]/g;
@@ -12,12 +12,13 @@ class RuleLogic {
      * @param file
      * @param rule
      */
-    analysisFile(file: FileInfoItem) {
+    analysisFile(file: FileInfo, rule: Rule): MatchResult {
         console.debug(`Analysing file >>> ${file.relativePath}`);
+        let result = new MatchResult(file, rule);
 
         let name = file.name;
 
-        for (let expression of file.rule.expressions) {
+        for (let expression of rule.expressions) {
             let valid = this.expressionRegExp.test(expression);
             if (!valid) {
                 continue;
@@ -60,7 +61,7 @@ class RuleLogic {
                         expression: expressionVar,
                         value: value,
                     };
-                    file.segments.push(matchSegment);
+                    result.segments.push(matchSegment);
                     name = name.substring(start);
                     expressionVarIndex++;
                 } else {
@@ -70,7 +71,7 @@ class RuleLogic {
                         expression: expressionConst,
                         value: expressionConst,
                     };
-                    file.segments.push(matchSegment);
+                    result.segments.push(matchSegment);
                     name = name.substring(expressionConst.length);
                     expressionConstIndex++;
                 }
@@ -88,14 +89,16 @@ class RuleLogic {
                     expression: expressionVariables[expressionVarIndex],
                     value: name,
                 };
-                file.segments.push(matchSegment);
+                result.segments.push(matchSegment);
             }
 
             // * only the first match needed
-            file.isMatch = true;
+            result.isMatch = true;
             console.debug(`File matched Matched expression >>> ${expression}`);
             break;
         }
+
+        return result;
     }
 
     /**
@@ -103,13 +106,10 @@ class RuleLogic {
      * @param file1
      * @param file2
      */
-    areFileInfosMatch(file1: FileInfoItem, file2: FileInfoItem): boolean {
-        console.debug(`Comparing file infos >>> file1=${file1.relativePath} | file2=${file2.relativePath}`);
-
-        if (!file1.isMatch || !file2.isMatch) {
-            // This shouldn't happen
-            return false;
-        }
+    areFileInfosMatch(file1: MatchResult, file2: MatchResult): boolean {
+        console.debug(
+            `Comparing file infos >>> file1=${file1.fileInfo.relativePath} | file2=${file2.fileInfo.relativePath}`,
+        );
 
         // - for {-1}
         let variableSegments1 = file1.segments.filter(x => x.expression.match(this.expressionSimilarRegExp));

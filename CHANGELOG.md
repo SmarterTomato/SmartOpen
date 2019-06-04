@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2019-06-04
+
+### Added
+
+* File filters
+* Ignore files or folders
+
+### Changed
+
+* Significant performance improvements
+
 ## [1.0.0] - 2019-06-03
 
 ### Added

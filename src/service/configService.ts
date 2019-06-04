@@ -9,6 +9,8 @@ class ConfigService {
         let config = new Config();
         try {
             config.activatedTags = vscode.workspace.getConfiguration().get("smartOpen.activatedTags");
+            config.ignoredFiles = vscode.workspace.getConfiguration().get("smartOpen.ignoredFiles");
+            config.fileFilters = vscode.workspace.getConfiguration().get("smartOpen.fileFilters");
 
             let builtIn: Array<Rule> = vscode.workspace.getConfiguration().get("smartOpen.rules.builtIn");
             config.rules = builtIn;
@@ -30,6 +32,16 @@ class ConfigService {
         } else {
             return config.rules.filter(x => x.tags.some(p => config.activatedTags.includes(p)));
         }
+    }
+
+    getFileFilters(): Array<string> {
+        let config = this.get();
+        return config.fileFilters;
+    }
+
+    getIgnoredFiles(): Array<string> {
+        let config = this.get();
+        return config.ignoredFiles;
     }
 }
 

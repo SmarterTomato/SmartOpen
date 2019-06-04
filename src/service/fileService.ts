@@ -1,14 +1,16 @@
 import * as vscode from "vscode";
 
-import { Rule } from "../model/rule";
 import { configService } from "./configService";
 import { ruleLogic } from "../logic/ruleLogic";
-import { FileInfoItem } from "../model/fileInfo";
+import { FileInfoItem, FileInfo, MatchResult } from "../model/fileInfo";
 
 let fileSystem = require("fs");
 let path = require("path");
 
 class FileService {
+    caching = false;
+    onAnalysisComplete = new vscode.EventEmitter();
+
     openRelatedFile() {
         let activeTextEditor = vscode.window.activeTextEditor;
         if (!activeTextEditor) {
@@ -30,25 +32,50 @@ class FileService {
 
         let name = path.basename(activeTextEditor.document.fileName);
         let relativePath = path.relative(workspaceFolder.uri.fsPath, activeTextEditor.document.fileName);
-        let activeFile = new FileInfoItem(name, activeTextEditor.document.fileName, relativePath);
+        let activeFile = new FileInfo(name, activeTextEditor.document.fileName, relativePath);
         console.debug(`Active file >>> ${JSON.stringify(activeFile)}`);
 
-        let fileInfos = this.getAllFilesInCurrentWorkspace();
+        let config = configService.get();
+        let fileInfos = this.getAllFilesInCurrentWorkspace(config.fileFilters, config.ignoredFiles);
 
-        let relatedFiles = this.getRelatedFiles(activeFile, fileInfos);
+        let matchResults = this.getRelatedFiles(activeFile, fileInfos);
 
         console.debug(`Sorting`);
-        relatedFiles = relatedFiles.sort(x => x.rule.order);
+        // matchResults = matchResults.sort(x => x.rule.order);
 
-        this.showQuickPick(activeFile, relatedFiles);
+        let fileInfoItems = new Array<FileInfoItem>();
+        for (let result of matchResults) {
+            fileInfoItems.push(new FileInfoItem(result.fileInfo));
+        }
+
+        this.showQuickPick(activeFile, fileInfoItems);
     }
+
+    // cacheWorkspace() {
+    //     let workspaceFolders = vscode.workspace.workspaceFolders;
+
+    //     if (!workspaceFolders || workspaceFolders.length === 0) {
+    //         return;
+    //     }
+
+    //     let rules = configService.getActivatedRules();
+
+    //     for (const folder of workspaceFolders) {
+    //         let path = folder.uri.fsPath + "\\" + ".gitignore";
+    //         let ignore = this.readIgnoreFile(path);
+
+    //         this.getAllFiles(folder.uri.fsPath, folder.uri.fsPath, ignore);
+    //     }
+    // }
+
+    populateFileInfo(fileNames: Array<string>) {}
 
     /**
      * Shows quick open dialog and opens the file picked by user
      * @param activeFile
      * @param relatedFiles
      */
-    private showQuickPick(activeFile: FileInfoItem, relatedFiles: Array<FileInfoItem>) {
+    private showQuickPick(activeFile: FileInfo, relatedFiles: Array<FileInfoItem>) {
         console.debug(`Showing pick dialog for ${relatedFiles.length} files`);
 
         let placeHolder = `Related files to ${activeFile.name}...`;
@@ -59,8 +86,8 @@ class FileService {
 
         vscode.window.showQuickPick(relatedFiles, { placeHolder: placeHolder }).then(selected => {
             if (selected) {
-                vscode.workspace.openTextDocument(selected.fullPath).then(document => {
-                    console.debug(`Open document >>> ${selected.relativePath}`);
+                vscode.workspace.openTextDocument(selected.fileInfo.fullPath).then(document => {
+                    console.debug(`Open document >>> ${selected.fileInfo.relativePath}`);
                     vscode.window.showTextDocument(document);
                 });
             }
@@ -72,30 +99,31 @@ class FileService {
      * @param activeFile
      * @param files
      */
-    private getRelatedFiles(activeFile: FileInfoItem, files: Array<FileInfoItem>): Array<FileInfoItem> {
+    private getRelatedFiles(activeFile: FileInfo, files: Array<FileInfo>): Array<MatchResult> {
         console.debug(`Getting related files`);
 
-        let relatedFiles = new Array<FileInfoItem>();
-
+        let relatedFiles = new Array<MatchResult>();
         let rules = configService.getActivatedRules().sort(x => x.order);
+
+        let activeFileMatchResults = new Array<MatchResult>();
+
+        for (let rule of rules) {
+            let result = ruleLogic.analysisFile(activeFile, rule);
+            // - If the current file not match to the rule, ignore
+            if (result.isMatch) {
+                activeFileMatchResults.push(result);
+            }
+        }
+
         for (let file of files) {
-            for (let rule of rules) {
-                activeFile.reset();
-                activeFile.setRule(rule);
-                ruleLogic.analysisFile(activeFile);
-                // - If the current file not match to the rule, ignore
-                if (!activeFile.isMatch) {
-                    continue;
-                }
-
+            for (let activeFileResult of activeFileMatchResults) {
                 if (activeFile.fullPath !== file.fullPath) {
-                    file.reset();
-                    file.setRule(rule);
-                    ruleLogic.analysisFile(file);
+                    let result = ruleLogic.analysisFile(file, activeFileResult.rule);
 
-                    if (file.isMatch && ruleLogic.areFileInfosMatch(activeFile, file)) {
-                        relatedFiles.push(file);
+                    if (result.isMatch && ruleLogic.areFileInfosMatch(activeFileResult, result)) {
+                        relatedFiles.push(result);
                         console.debug(`Found match >>> ${JSON.stringify(file)}`);
+
                         break;
                     }
                 }
@@ -108,22 +136,22 @@ class FileService {
     /**
      * Get all file informations in current workspace as QuickPickItem
      */
-    private getAllFilesInCurrentWorkspace(): Array<FileInfoItem> {
+    private getAllFilesInCurrentWorkspace(fileFilters: Array<string>, ignoredFiles: Array<string>): Array<FileInfo> {
         console.debug(`Get all files in workspace`);
 
-        let results = new Array<FileInfoItem>();
+        let results = new Array<FileInfo>();
 
         // Only scan file in current workspace
         let workspaceFolders = vscode.workspace.workspaceFolders;
 
         for (const folder of workspaceFolders) {
             let folderPath = folder.uri.fsPath;
-            let filePaths = this.getAllFiles(folderPath);
+            let filePaths = this.getAllFiles(folderPath, folderPath, fileFilters, ignoredFiles);
 
             for (const filePath of filePaths) {
                 let name = path.basename(filePath);
                 let relativePath = path.relative(folderPath, filePath);
-                let fileInfo = new FileInfoItem(name, filePath, relativePath);
+                let fileInfo = new FileInfo(name, filePath, relativePath);
                 results.push(fileInfo);
             }
         }
@@ -132,21 +160,63 @@ class FileService {
         return results;
     }
 
-    private getAllFiles(dirPath: string): Array<string> {
+    private getAllFiles(
+        basePath: string,
+        dirPath: string,
+        fileFilters: Array<string>,
+        ignoreFileNames: Array<string>,
+    ): Array<string> {
         let fileNames: Array<string> = new Array<string>();
 
         let names = fileSystem.readdirSync(dirPath);
-        for (let i = 0; i < names.length; i++) {
-            const name = names[i];
-            let path = dirPath + "\\" + name;
+        for (let name of names) {
+            let fullPath = dirPath + "\\" + name;
+            let relativePath = path.relative(basePath, fullPath);
+
+            // * Only include file not be ignored
+            let ignore = false;
+            for (let item of ignoreFileNames) {
+                try {
+                    let reg = new RegExp("^" + item + "$");
+                    if (reg.test(name) || reg.test(relativePath) || reg.test(fullPath)) {
+                        ignore = true;
+                        break;
+                    }
+                } catch (error) {
+                    console.exception(`Ignored files regexp error >>> fileName=${item} | error=${error}`);
+                }
+            }
+
+            if (ignore) {
+                continue;
+            }
+
             // - Path is a directory
-            if (fileSystem.statSync(path).isDirectory()) {
-                let tmpFileNames = this.getAllFiles(path);
+            if (fileSystem.statSync(fullPath).isDirectory()) {
+                let tmpFileNames = this.getAllFiles(basePath, fullPath, fileFilters, ignoreFileNames);
                 fileNames = fileNames.concat(tmpFileNames);
             }
             // - Path is a file
             else {
-                fileNames.push(path);
+                // * Only include file that match filter
+                let include = false;
+                for (let item of fileFilters) {
+                    try {
+                        let reg = new RegExp("^" + item + "$");
+                        if (reg.test(name) || reg.test(relativePath) || reg.test(fullPath)) {
+                            include = true;
+                            break;
+                        }
+                    } catch (error) {
+                        console.exception(`Include files regexp error >>> fileName=${item} | error=${error}`);
+                    }
+                }
+
+                if (!include) {
+                    continue;
+                }
+
+                fileNames.push(fullPath);
             }
         }
 
