@@ -1,33 +1,40 @@
 import { Rule } from "./rule";
 import { QuickPickItem } from "vscode";
 
-export class FileInfoItem implements QuickPickItem {
-    isMatch: boolean = false;
-    rule: Rule;
+export class FileInfo {
     name: string;
     fullPath: string;
     relativePath: string;
-    segments = new Array<FileSegment>();
-
-    label: string;
-    description: string;
 
     constructor(name: string, fullPath: string, relativePath: string) {
         this.name = name;
         this.fullPath = fullPath;
         this.relativePath = relativePath;
-        this.label = name;
-        this.description = relativePath;
     }
+}
 
-    reset() {
-        this.isMatch = false;
-        this.rule = null;
-        this.segments = new Array<FileSegment>();
-    }
+export class MatchResult {
+    fileInfo: FileInfo;
+    isMatch: boolean = false;
+    rule: Rule;
+    segments = new Array<FileSegment>();
 
-    setRule(rule: Rule) {
+    constructor(fileInfo: FileInfo, rule: Rule) {
+        this.fileInfo = fileInfo;
         this.rule = rule;
+    }
+}
+
+export class FileInfoItem implements QuickPickItem {
+    fileInfo: FileInfo;
+
+    label: string;
+    description: string;
+
+    constructor(fileInfo: FileInfo) {
+        this.fileInfo = fileInfo;
+        this.label = fileInfo.name;
+        this.description = fileInfo.relativePath;
     }
 }
 

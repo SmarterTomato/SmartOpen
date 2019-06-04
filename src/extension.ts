@@ -8,15 +8,33 @@ import { fileService } from "./service/fileService";
 export function activate(context: vscode.ExtensionContext) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
-    console.log('Smart Open is now active!');
+    console.log("Smart Open is now active!");
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
+
+    let fileWatcher = vscode.workspace.createFileSystemWatcher("*");
+
     let disposable = vscode.commands.registerCommand("smartOpen.openRelatedFile", () => {
         console.debug(`Open related file started`);
         fileService.openRelatedFile();
+        // fileService.cacheWorkspace();
     });
+
+    // fileService.cacheWorkspace();
+    // vscode.workspace.onDidOpenTextDocument((e: vscode.TextDocument) => {
+
+    // });
+    // vscode.workspace.onDidChangeConfiguration((e: vscode.ConfigurationChangeEvent) => {
+
+    // });
+    // vscode.workspace.onDidChangeWorkspaceFolders((e: vscode.WorkspaceFoldersChangeEvent) => {
+
+    // });
+
+    // fileWatcher.onDidCreate(() => {});
+    // fileWatcher.onDidDelete(() => { });
 
     context.subscriptions.push(disposable);
 }
