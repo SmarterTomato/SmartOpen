@@ -8,8 +8,10 @@ Smart Open is a vscode extension help user better manage opened files
 
 Open related files using "Ctrl + ;"
 
-<img alt="Open related files"
-      src="https://github.com/SmartyTomato/SmartOpen/blob/master/resources/img/readme/readme_1.png">
+<!-- <img alt="Open related files"
+      src="https://github.com/SmartyTomato/SmartOpen/blob/master/resources/img/readme/readme_1.png"> -->
+
+## Requirements
 
 Just install from the Vscode extension marketplace
 
@@ -21,13 +23,11 @@ Just install from the Vscode extension marketplace
 * `rules.builtIn`: Builtin rules. Use as you wish, just add it into activated tags
 * `rules.custom`: Custom rules. Don't forget add this into activatedTags to enable it
   * `tags`: Array of tags use to identify the rule
-  * `order`: Result will show in this order. Smaller number wil show first. Default to 1 for a custom rule
+  * `order`: Result will show in this order. Smaller number wil show first. Default to 1 for a custom rule. If this large than 100, the result will in alphabetic order
   * `breakChars`: The character that breaks in the file path
   * `expressions`: Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow
 
 ## Known Issues
-
-* File display multiple times
 
 ### Performance issues
 
@@ -40,15 +40,14 @@ Due to the single thread limitation, the performance for this extension depends 
 
 ## Release Notes
 
-## [1.1.0] - 2019-06-04
-
-### Added
-
-* File filters
-* Ignore files or folders
+## [1.1.3] - 2019-06-04
 
 ### Changed
 
-* Significant performance improvements
+* Improve results display order
+* Now the `default rule` will be sort by filename
+* Any rule order larger than 100 will be sort by filename
+* Performance improvements
+
 
 [CHANGELOG]: https://github.com/smartytomato/smartopen/CHANGELOG.md

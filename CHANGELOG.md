@@ -1,6 +1,13 @@
 # Change Log
 
-## [Unreleased]
+## [1.1.3] - 2019-06-04
+
+### Changed
+
+* Improve results display order
+* Now the `default rule` will be sort by filename
+* Any rule order larger than 100 will be sort by filename
+* Performance improvements
 
 ## [1.1.0] - 2019-06-04
 

@@ -33,16 +33,6 @@ class ConfigService {
             return config.rules.filter(x => x.tags.some(p => config.activatedTags.includes(p)));
         }
     }
-
-    getFileFilters(): Array<string> {
-        let config = this.get();
-        return config.fileFilters;
-    }
-
-    getIgnoredFiles(): Array<string> {
-        let config = this.get();
-        return config.ignoredFiles;
-    }
 }
 
 let configService = new ConfigService();
