@@ -41,7 +41,17 @@ class FileService {
         let matchResults = this.getRelatedFiles(activeFile, fileInfos);
 
         console.debug(`Sorting`);
-        // matchResults = matchResults.sort(x => x.rule.order);
+        matchResults = matchResults.sort((a, b) => {
+            if (a.rule.order < b.rule.order) {
+                return -1;
+            } else if (a.rule.order === b.rule.order && a.rule.order > 100) {
+                return a.fileInfo.name > b.fileInfo.name ? 1 : -1;
+            } else if (a.rule.order === b.rule.order && a.fileInfo.name > b.fileInfo.name) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
 
         let fileInfoItems = new Array<FileInfoItem>();
         for (let result of matchResults) {
@@ -103,7 +113,13 @@ class FileService {
         console.debug(`Getting related files`);
 
         let relatedFiles = new Array<MatchResult>();
-        let rules = configService.getActivatedRules().sort(x => x.order);
+        let rules = configService.getActivatedRules().sort((a, b) => {
+            if (a.order > b.order) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
 
         let activeFileMatchResults = new Array<MatchResult>();
 
