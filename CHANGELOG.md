@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.2.0] - 2019-06-17
+
+### Added
+
+* Add built in rule for Javascript, match js, css, less, etc
+* Add built in rule for C# Test, match Test.cs, Tests.cs
+
+### Changed
+
+* Update built in rule for Angular, now will match files component, service, model
+
 ## [1.1.3] - 2019-06-04
 
 ### Changed

@@ -17,284 +17,305 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "smartOpen.openRelatedFile",
-				"title": "Open Related File"
-			}
-		],
-		"keybindings": [
-			{
-				"command": "smartOpen.openRelatedFile",
-				"key": "ctrl+;",
-				"when": "editorTextFocus"
-			}
-		],
-		"configuration": [
-			{
-				"title": "Smart Open",
-				"properties": {
-					"smartOpen.activatedTags": {
-						"type": "array",
-						"items": {
+		"commands": [{
+			"command": "smartOpen.openRelatedFile",
+			"title": "Open Related File"
+		}],
+		"keybindings": [{
+			"command": "smartOpen.openRelatedFile",
+			"key": "ctrl+;",
+			"when": "editorTextFocus"
+		}],
+		"configuration": [{
+			"title": "Smart Open",
+			"properties": {
+				"smartOpen.activatedTags": {
+					"type": "array",
+					"items": {
+						"tags": {
+							"type": "string",
+							"examples": [
+								"default"
+							],
+							"description": "Rule tags"
+						}
+					},
+					"uniqueItems": true,
+					"default": [
+						"all"
+					],
+					"description": "Current activated tags from defined rules. Multiple rule can be applied"
+				},
+				"smartOpen.fileFilters": {
+					"type": "array",
+					"items": {
+						"ignored": {
+							"type": "string",
+							"description": "RegExp string use to check file name, full path and relative path"
+						}
+					},
+					"uniqueItems": true,
+					"default": [
+						".*",
+						".*.ts",
+						".*.cs",
+						".*.xml",
+						".*.h",
+						".*.cpp",
+						".*.json",
+						".*.html",
+						".*.css",
+						".*.less",
+						".*.sass",
+						".*.js"
+					],
+					"description": "(Remove) first item to Enable. Only include file name, full path and relative path with the given regexp, add this to significant reduce the calculation time"
+				},
+				"smartOpen.ignoredFiles": {
+					"type": "array",
+					"items": {
+						"ignored": {
+							"type": "string",
+							"description": "RegExp string use to check file name, full path and relative path"
+						}
+					},
+					"uniqueItems": true,
+					"default": [
+						"\\..*",
+						"__.*",
+						"node_modules",
+						"[Dd]ebug",
+						"[Bb]in",
+						"[Bb]uild",
+						"[Rr]elease",
+						"[Ll]og",
+						"[Tt]est",
+						"out",
+						"coverages"
+					],
+					"description": "Ignored search path, add this to significant reduce the calculation time"
+				},
+				"smartOpen.rules.builtIn": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
 							"tags": {
-								"type": "string",
-								"examples": [
-									"default"
-								],
-								"description": "Rule tags"
-							}
-						},
-						"uniqueItems": true,
-						"default": [
-							"all"
-						],
-						"description": "Current activated tags from defined rules. Multiple rule can be applied"
-					},
-					"smartOpen.fileFilters": {
-						"type": "array",
-						"items": {
-							"ignored": {
-								"type": "string",
-								"description": "RegExp string use to check file name, full path and relative path"
-							}
-						},
-						"uniqueItems": true,
-						"default": [
-							".*",
-							".*.ts",
-							".*.cs",
-							".*.xml",
-							".*.h",
-							".*.cpp",
-							".*.json",
-							".*.html",
-							".*.css",
-							".*.less",
-							".*.sass",
-							".*.js"
-						],
-						"description": "(Remove) first item to Enable. Only include file name, full path and relative path with the given regexp, add this to significant reduce the calculation time"
-					},
-					"smartOpen.ignoredFiles": {
-						"type": "array",
-						"items": {
-							"ignored": {
-								"type": "string",
-								"description": "RegExp string use to check file name, full path and relative path"
-							}
-						},
-						"uniqueItems": true,
-						"default": [
-							"\\..*",
-							"__.*",
-							"node_modules",
-							"[Dd]ebug",
-							"[Bb]in",
-							"[Bb]uild",
-							"[Rr]elease",
-							"[Ll]og",
-							"[Tt]est",
-							"out",
-							"coverages"
-						],
-						"description": "Ignored search path, add this to significant reduce the calculation time"
-					},
-					"smartOpen.rules.builtIn": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"properties": {
-								"tags": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									},
-									"uniqueItems": true,
-									"description": "Use to identify the rule"
+								"type": "array",
+								"items": {
+									"type": "string"
 								},
-								"order": {
-									"type": "integer",
-									"default": 10,
-									"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule. \nIf this large than 100, the result will in alphabetic order"
-								},
-								"breakChars": {
-									"type": "array",
-									"items": {
-										"type": "string",
-										"examples": [
-											"-",
-											"_",
-											".",
-											"{Cap}"
-										]
-									},
-									"uniqueItems": true,
-									"default": [
+								"uniqueItems": true,
+								"description": "Use to identify the rule"
+							},
+							"order": {
+								"type": "integer",
+								"default": 10,
+								"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule. \nIf this large than 100, the result will in alphabetic order"
+							},
+							"breakChars": {
+								"type": "array",
+								"items": {
+									"type": "string",
+									"examples": [
 										"-",
 										"_",
 										".",
 										"{Cap}"
-									],
-									"description": "The character that breaks in the file path"
+									]
 								},
-								"expressions": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									},
-									"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow"
-								}
-							},
-							"required": [
-								"tags",
-								"expressions"
-							],
-							"description": "Rule object"
-						},
-						"description": "Builtin rules. Use as you wish, just add it into activated tags",
-						"default": [
-							{
-								"tags": [
-									"Default"
-								],
-								"order": 999,
-								"breakChars": [
+								"uniqueItems": true,
+								"default": [
 									"-",
 									"_",
 									".",
 									"{Cap}"
 								],
-								"expressions": [
-									"{-2}.{1}"
-								]
+								"description": "The character that breaks in the file path"
 							},
-							{
-								"tags": [
-									"Angular"
-								],
-								"order": 11,
-								"breakChars": [
-									"-",
-									"."
-								],
-								"expressions": [
-									"{1}.component.*",
-									"{1}.Service.ts"
-								]
-							},
-							{
-								"tags": [
-									"Typescript"
-								],
-								"order": 12,
-								"breakChars": [
-									"-",
-									"."
-								],
-								"expressions": [
-									"{1}.{-2}.*"
-								]
-							},
-							{
-								"tags": [
-									"C#"
-								],
-								"order": 11,
-								"breakChars": [
-									"{Cap}"
-								],
-								"expressions": [
-									"I{1}.cs",
-									"{1}.cs"
-								]
-							},
-							{
-								"tags": [
-									"Controller, Logic, Repository"
-								],
-								"order": 12,
-								"breakChars": [
-									"{Cap}"
-								],
-								"expressions": [
-									"{1}Controller.cs",
-									"{1}Logic.cs",
-									"{1}Repository.cs"
-								]
-							},
-							{
-								"tags": [
-									"C++"
-								],
-								"order": 12,
-								"breakChars": [
-									"{Cap}"
-								],
-								"expressions": [
-									"{1}.h",
-									"{1}.cpp"
-								]
+							"expressions": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow"
 							}
-						]
+						},
+						"required": [
+							"tags",
+							"expressions"
+						],
+						"description": "Rule object"
 					},
-					"smartOpen.rules.custom": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"properties": {
-								"tags": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									},
-									"uniqueItems": true,
-									"description": "Use to identify the rule"
+					"description": "Builtin rules. Use as you wish, just add it into activated tags",
+					"default": [{
+							"tags": [
+								"Default"
+							],
+							"order": 999,
+							"breakChars": [
+								"-",
+								"_",
+								".",
+								"{Cap}"
+							],
+							"expressions": [
+								"{-2}.{1}"
+							]
+						},
+						{
+							"tags": [
+								"Angular"
+							],
+							"order": 11,
+							"breakChars": [
+								"-",
+								"."
+							],
+							"expressions": [
+								"{1}.component.*",
+								"{1}.service.ts",
+								"{1}.model.ts"
+							]
+						},
+						{
+							"tags": [
+								"Angular"
+							],
+							"order": 12,
+							"breakChars": [
+								"-",
+								"."
+							],
+							"expressions": [
+								"{1}.{-2}.*"
+							]
+						},
+						{
+							"tags": [
+								"Javascript"
+							],
+							"order": 11,
+							"breakChars": [
+								"-"
+							],
+							"expressions": [
+								"{1}.*"
+							]
+						},
+						{
+							"tags": [
+								"C# Interface"
+							],
+							"order": 11,
+							"breakChars": [
+								"{Cap}"
+							],
+							"expressions": [
+								"I{1}.cs",
+								"{1}.cs"
+							]
+						},
+						{
+							"tags": [
+								"C# Test"
+							],
+							"order": 12,
+							"breakChars": [
+								"{Cap}"
+							],
+							"expressions": [
+								"{1}Test.cs",
+								"{1}Tests.cs",
+								"{1}.cs"
+							]
+						},
+						{
+							"tags": [
+								"C# Controller, Logic, Repository"
+							],
+							"order": 12,
+							"breakChars": [
+								"{Cap}"
+							],
+							"expressions": [
+								"{1}Controller.cs",
+								"{1}Logic.cs",
+								"{1}Repository.cs"
+							]
+						},
+						{
+							"tags": [
+								"C++"
+							],
+							"order": 12,
+							"breakChars": [
+								"{Cap}"
+							],
+							"expressions": [
+								"{1}.h",
+								"{1}.cpp"
+							]
+						}
+					]
+				},
+				"smartOpen.rules.custom": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"tags": {
+								"type": "array",
+								"items": {
+									"type": "string"
 								},
-								"order": {
-									"type": "integer",
-									"default": 10,
-									"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule. \nIf this large than 100, the result will in alphabetic order"
-								},
-								"breakChars": {
-									"type": "array",
-									"items": {
-										"type": "string",
-										"examples": [
-											"-",
-											"_",
-											".",
-											"{Cap}"
-										]
-									},
-									"uniqueItems": true,
-									"default": [
+								"uniqueItems": true,
+								"description": "Use to identify the rule"
+							},
+							"order": {
+								"type": "integer",
+								"default": 10,
+								"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule. \nIf this large than 100, the result will in alphabetic order"
+							},
+							"breakChars": {
+								"type": "array",
+								"items": {
+									"type": "string",
+									"examples": [
 										"-",
 										"_",
 										".",
 										"{Cap}"
-									],
-									"description": "The character that breaks in the file path"
+									]
 								},
-								"expressions": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									},
-									"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow"
-								}
+								"uniqueItems": true,
+								"default": [
+									"-",
+									"_",
+									".",
+									"{Cap}"
+								],
+								"description": "The character that breaks in the file path"
 							},
-							"required": [
-								"tags",
-								"expressions"
-							],
-							"description": "Rule object"
+							"expressions": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow"
+							}
 						},
-						"description": "Custom rules. Don't forget add this into activatedTags to enable it"
-					}
+						"required": [
+							"tags",
+							"expressions"
+						],
+						"description": "Rule object"
+					},
+					"description": "Custom rules. Don't forget add this into activatedTags to enable it",
+					"default": [{}]
 				}
 			}
-		]
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

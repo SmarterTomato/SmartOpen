@@ -8,6 +8,14 @@ Smart Open is a vscode extension help user better manage opened files
 
 Open related files using "Ctrl + ;"
 
+E.g.
+
+* example.component.ts, example.component.html, example.component.css
+* example.service.ts, example.component.ts
+* ExampleController.h, ExampleController.cpp
+* ExampleController.cs, ExampleLogic.cs, ExampleRepository.cs
+* IExample.cs, Example.cs
+
 <!-- <img alt="Open related files"
       src="https://github.com/SmartyTomato/SmartOpen/blob/master/resources/img/readme/readme_1.png"> -->
 
@@ -40,14 +48,15 @@ Due to the single thread limitation, the performance for this extension depends 
 
 ## Release Notes
 
-## [1.1.3] - 2019-06-04
+## [1.2.0] - 2019-06-17
+
+### Added
+
+* Add built in rule for Javascript, match js, css, less, etc
+* Add built in rule for C# Test, match Test.cs, Tests.cs
 
 ### Changed
 
-* Improve results display order
-* Now the `default rule` will be sort by filename
-* Any rule order larger than 100 will be sort by filename
-* Performance improvements
-
+* Update built in rule for Angular, now will match files component, service, model
 
 [CHANGELOG]: https://github.com/smartytomato/smartopen/CHANGELOG.md
