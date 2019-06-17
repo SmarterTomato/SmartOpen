@@ -2,7 +2,7 @@
 	"name": "smartopen",
 	"displayName": "SmartOpen",
 	"description": "SmartOpen is an extension opens related files in the project",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -180,12 +180,13 @@
 								],
 								"expressions": [
 									"{1}.component.*",
-									"{1}.Service.ts"
+									"{1}.service.ts",
+									"{1}.model.ts"
 								]
 							},
 							{
 								"tags": [
-									"Typescript"
+									"Angular"
 								],
 								"order": 12,
 								"breakChars": [
@@ -198,7 +199,19 @@
 							},
 							{
 								"tags": [
-									"C#"
+									"Javascript"
+								],
+								"order": 11,
+								"breakChars": [
+									"-"
+								],
+								"expressions": [
+									"{1}.*"
+								]
+							},
+							{
+								"tags": [
+									"C# Interface"
 								],
 								"order": 11,
 								"breakChars": [
@@ -211,7 +224,21 @@
 							},
 							{
 								"tags": [
-									"Controller, Logic, Repository"
+									"C# Test"
+								],
+								"order": 12,
+								"breakChars": [
+									"{Cap}"
+								],
+								"expressions": [
+									"{1}Test.cs",
+									"{1}Tests.cs",
+									"{1}.cs"
+								]
+							},
+							{
+								"tags": [
+									"C# Controller, Logic, Repository"
 								],
 								"order": 12,
 								"breakChars": [
@@ -290,7 +317,10 @@
 							],
 							"description": "Rule object"
 						},
-						"description": "Custom rules. Don't forget add this into activatedTags to enable it"
+						"description": "Custom rules. Don't forget add this into activatedTags to enable it",
+						"default": [
+							{}
+						]
 					}
 				}
 			}
