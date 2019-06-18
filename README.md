@@ -48,6 +48,8 @@ Due to the single thread limitation, the performance for this extension depends 
 
 ## Release Notes
 
+!!! Critical bug fix
+
 ## [1.2.0] - 2019-06-17
 
 ### Added

@@ -317,10 +317,7 @@
 							],
 							"description": "Rule object"
 						},
-						"description": "Custom rules. Don't forget add this into activatedTags to enable it",
-						"default": [
-							{}
-						]
+						"description": "Custom rules. Don't forget add this into activatedTags to enable it"
 					}
 				}
 			}
