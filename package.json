@@ -2,7 +2,7 @@
 	"name": "smartopen",
 	"displayName": "SmartOpen",
 	"description": "SmartOpen is an extension opens related files in the project",
-	"version": "1.2.1",
+	"version": "1.2.3",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -317,10 +317,7 @@
 							],
 							"description": "Rule object"
 						},
-						"description": "Custom rules. Don't forget add this into activatedTags to enable it",
-						"default": [
-							{}
-						]
+						"description": "Custom rules. Don't forget add this into activatedTags to enable it"
 					}
 				}
 			}
