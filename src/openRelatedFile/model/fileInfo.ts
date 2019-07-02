@@ -25,7 +25,7 @@ export class MatchResult {
     }
 }
 
-export class FileInfoItem implements QuickPickItem {
+export class FileInfoQuickPickItem implements QuickPickItem {
     fileInfo: FileInfo;
 
     label: string;

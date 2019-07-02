@@ -1,5 +1,15 @@
 # Change Log
 
+## [1.3.0] - 2019-02-07
+
+### Added
+
+* New feature! - Pin documents
+  * Pinned documents panel
+  * Editor right click context menu
+
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.png" alt="Pinned documents">
+
 ## [1.2.0] - 2019-06-17
 
 ### Added

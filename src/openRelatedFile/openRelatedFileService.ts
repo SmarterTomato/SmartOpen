@@ -1,26 +1,32 @@
 import * as vscode from "vscode";
 
-import { configService } from "./configService";
-import { ruleLogic } from "../logic/ruleLogic";
-import { FileInfoItem, FileInfo, MatchResult } from "../model/fileInfo";
+import { configService } from "../utils/configService";
+import { openRelatedFileLogic } from "./openRelatedFileLogic";
+import { FileInfoQuickPickItem, FileInfo, MatchResult } from "./model/fileInfo";
 
 let fileSystem = require("fs");
 let path = require("path");
 
-class FileService {
+class OpenRelatedFileService {
     caching = false;
     onAnalysisComplete = new vscode.EventEmitter();
 
+    /**
+     * Show quick pick for files that related to the active document
+     */
     openRelatedFile() {
+        // * Should only active when focus on text editor
         let activeTextEditor = vscode.window.activeTextEditor;
         if (!activeTextEditor) {
+            // This should not happen right now due to the shortcut binding
             // Don't do anything if not text editor for now
             // List all files later if needed
-            // This should not happen right now due to the shortcut binding
             vscode.window.showInformationMessage(`Open related file activated, but no active text editor`);
             console.log(`Open related file activated, but no active text editor`);
             return;
         }
+
+        // * Show related file only available for workspace
         let workspaceFolder = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
         if (!workspaceFolder) {
             vscode.window.showInformationMessage(`Active text editor not belongs to workspace`);
@@ -28,18 +34,21 @@ class FileService {
             return;
         }
 
+        // * Init info active documnet
         console.debug(`Getting active file`);
-
         let name = path.basename(activeTextEditor.document.fileName);
         let relativePath = path.relative(workspaceFolder.uri.fsPath, activeTextEditor.document.fileName);
         let activeFile = new FileInfo(name, activeTextEditor.document.fileName, relativePath);
         console.debug(`Active file >>> ${JSON.stringify(activeFile)}`);
 
+        // Get configs for file filters
         let config = configService.get();
         let fileInfos = this.getAllFilesInCurrentWorkspace(config.fileFilters, config.ignoredFiles);
 
+        // * Calculate related files
         let matchResults = this.getRelatedFiles(activeFile, fileInfos);
 
+        // * Sort by rule order and file name
         console.debug(`Sorting`);
         matchResults = matchResults.sort((a, b) => {
             if (a.rule.order < b.rule.order) {
@@ -53,48 +62,30 @@ class FileService {
             }
         });
 
-        let fileInfoItems = new Array<FileInfoItem>();
-        for (let result of matchResults) {
-            fileInfoItems.push(new FileInfoItem(result.fileInfo));
-        }
-
-        this.showQuickPick(activeFile, fileInfoItems);
+        this.showQuickPick(activeFile, matchResults);
     }
-
-    // cacheWorkspace() {
-    //     let workspaceFolders = vscode.workspace.workspaceFolders;
-
-    //     if (!workspaceFolders || workspaceFolders.length === 0) {
-    //         return;
-    //     }
-
-    //     let rules = configService.getActivatedRules();
-
-    //     for (const folder of workspaceFolders) {
-    //         let path = folder.uri.fsPath + "\\" + ".gitignore";
-    //         let ignore = this.readIgnoreFile(path);
-
-    //         this.getAllFiles(folder.uri.fsPath, folder.uri.fsPath, ignore);
-    //     }
-    // }
-
-    populateFileInfo(fileNames: Array<string>) {}
 
     /**
      * Shows quick open dialog and opens the file picked by user
-     * @param activeFile
-     * @param relatedFiles
+     * @param activeFile - current active file info
+     * @param results - match results
      */
-    private showQuickPick(activeFile: FileInfo, relatedFiles: Array<FileInfoItem>) {
-        console.debug(`Showing pick dialog for ${relatedFiles.length} files`);
+    private showQuickPick(activeFile: FileInfo, results: Array<MatchResult>) {
+        console.debug(`Showing pick dialog for ${results.length} files`);
+
+        // * Convert to quick pick item
+        let relatedFiles = new Array<FileInfoQuickPickItem>();
+        for (let result of results) {
+            relatedFiles.push(new FileInfoQuickPickItem(result.fileInfo));
+        }
 
         let placeHolder = `Related files to ${activeFile.name}...`;
-
         if (relatedFiles.length === 0) {
             placeHolder = `No files found related to ${activeFile.name}...`;
         }
 
         vscode.window.showQuickPick(relatedFiles, { placeHolder: placeHolder }).then(selected => {
+            // * Open selected document
             if (selected) {
                 vscode.workspace.openTextDocument(selected.fileInfo.fullPath).then(document => {
                     console.debug(`Open document >>> ${selected.fileInfo.relativePath}`);
@@ -106,12 +97,14 @@ class FileService {
 
     /**
      * Calculate related files
-     * @param activeFile
-     * @param files
+     * @param activeFile - active file info
+     * @param files - file infos in workspace
+     * @returns - array of match result for related files
      */
     private getRelatedFiles(activeFile: FileInfo, files: Array<FileInfo>): Array<MatchResult> {
-        console.debug(`Getting related files`);
+        console.debug(`Calculating related files`);
 
+        // * Sort rules so the most important rule always match first
         let relatedFiles = new Array<MatchResult>();
         let rules = configService.getActivatedRules().sort((a, b) => {
             if (a.order > b.order) {
@@ -121,22 +114,31 @@ class FileService {
             }
         });
 
+        // * Match all rules with active file, only these rules needs to be calculated
         let activeFileMatchResults = new Array<MatchResult>();
-
         for (let rule of rules) {
-            let result = ruleLogic.analysisFile(activeFile, rule);
-            // - If the current file not match to the rule, ignore
-            if (result.isMatch) {
-                activeFileMatchResults.push(result);
+            try {
+                let result = openRelatedFileLogic.analysisFile(activeFile, rule);
+                // - If the current file not match to the rule, ignore
+                if (result.isMatch) {
+                    activeFileMatchResults.push(result);
+                }
+            } catch (error) {
+                // ! Rule not setup properly, some property missinng in the config
+                vscode.window.showErrorMessage(
+                    `Rule ${[rule]} is not a valid rule, please check the rule and try again. Or contact support`,
+                );
+                console.error(`Rule is not valid >>> rule=${[rule]} | activeFile=${activeFile.fullPath}`);
             }
         }
 
         for (let file of files) {
             for (let activeFileResult of activeFileMatchResults) {
+                // * Match up the files in workspace to the rule that match active file
                 if (activeFile.fullPath !== file.fullPath) {
-                    let result = ruleLogic.analysisFile(file, activeFileResult.rule);
+                    let result = openRelatedFileLogic.analysisFile(file, activeFileResult.rule);
 
-                    if (result.isMatch && ruleLogic.areFileInfosMatch(activeFileResult, result)) {
+                    if (result.isMatch && openRelatedFileLogic.areFileInfosMatch(activeFileResult, result)) {
                         relatedFiles.push(result);
                         console.debug(`Found match >>> ${JSON.stringify(file)}`);
 
@@ -151,15 +153,17 @@ class FileService {
 
     /**
      * Get all file informations in current workspace as QuickPickItem
+     * @param fileFilters - array of regex used to filter files
+     * @param ignoredFiles - array of regex used to ignore file
+     * @returns - array of file info
      */
     private getAllFilesInCurrentWorkspace(fileFilters: Array<string>, ignoredFiles: Array<string>): Array<FileInfo> {
         console.debug(`Get all files in workspace`);
 
         let results = new Array<FileInfo>();
 
-        // Only scan file in current workspace
+        // Scan file in current workspace
         let workspaceFolders = vscode.workspace.workspaceFolders;
-
         for (const folder of workspaceFolders) {
             let folderPath = folder.uri.fsPath;
             let filePaths = this.getAllFiles(folderPath, folderPath, fileFilters, ignoredFiles);
@@ -214,7 +218,7 @@ class FileService {
             }
             // - Path is a file
             else {
-                // * Only include file that match filter
+                // - Only include file that match filter
                 let include = false;
                 for (let item of fileFilters) {
                     try {
@@ -240,5 +244,5 @@ class FileService {
     }
 }
 
-let fileService = new FileService();
-export { fileService };
+let openRelatedFileService = new OpenRelatedFileService();
+export { openRelatedFileService };

@@ -1,7 +1,7 @@
-import { Rule } from "../model/rule";
-import { FileInfoItem, SegmentType, FileSegment, FileInfo, MatchResult } from "../model/fileInfo";
+import { Rule } from "./model/rule";
+import { FileInfoQuickPickItem, SegmentType, FileSegment, FileInfo, MatchResult } from "./model/fileInfo";
 
-class RuleLogic {
+class OpenRelatedFileLogic {
     wildcardRegExp = /[*]/g;
     expressionConstantRegExp = /{[\d]*}/g;
     expressionSimilarRegExp = /{-[\d]*}/g;
@@ -9,8 +9,9 @@ class RuleLogic {
 
     /**
      * Get result if the name matches any rule expression
-     * @param file
-     * @param rule
+     * @param file - file info
+     * @param rule - file match rule
+     * @returns - match result
      */
     analysisFile(file: FileInfo, rule: Rule): MatchResult {
         console.debug(`Analysing file >>> ${file.relativePath}`);
@@ -92,7 +93,7 @@ class RuleLogic {
                 result.segments.push(matchSegment);
             }
 
-            // * only the first match needed
+            // - only the first match needed
             result.isMatch = true;
             console.debug(`File matched Matched expression >>> ${expression}`);
             break;
@@ -167,7 +168,7 @@ class RuleLogic {
 
         regexString += "]";
 
-        // - {Cap}
+        // * {Cap}
         if (breakCap) {
             regexString += "|(?=[A-Z])";
         }
@@ -187,5 +188,5 @@ class RuleLogic {
     }
 }
 
-let ruleLogic = new RuleLogic();
-export { ruleLogic };
+let openRelatedFileLogic = new OpenRelatedFileLogic();
+export { openRelatedFileLogic };
