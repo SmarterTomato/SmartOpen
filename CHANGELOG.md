@@ -8,7 +8,7 @@
   * Pinned documents panel
   * Editor right click context menu
 
-<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.png" alt="Pinned documents">
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.jpg" alt="Pinned documents">
 
 ## [1.2.0] - 2019-06-17
 
