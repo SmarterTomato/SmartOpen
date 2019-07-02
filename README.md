@@ -1,12 +1,44 @@
 # SmartOpen README
 
-Smart Open is a vscode extension help user better manage opened files
+Smart Open is a vscode extension help user better manage opened documents
+
+## Contacts
+
+For any issues or suggestions, contact me via following method:
+
+Email: smartytomato@hotmail.com
+
+Git: [SmartOpen](https://github.com/SmartyTomato/SmartOpen/)
+
+Send me through your configs I will make them built in.
 
 ## Features
 
+### Pin documents
+
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.png" alt="Pinned documents">
+
+Pin documents to the top of the explorer panel using shortcut and then quick pick pinned documents with shortcut to boost your productivity.
+
+Shortcuts:
+
+* Pin: `Ctrl + '`
+* Unpin: `Ctrl + shift + '`
+* Quick pick pinned documents: `Ctrl + alt + '`
+* Open all pinned documents: `Ctrl + shift + alt + '`
+
+Note:
+
+* If you want the panel on the top, drag and drop "pinned documents" view to the top.
+* This feature work best with ZEN mode with small number of focused documents.
+* You can close all other tab and reopen pinned documents to keep your workspace clean.
+
 ### Open related files
 
-Open related files using "Ctrl + ;"
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_1.png" alt="">
+
+Shortcuts:
+Open related files using `Ctrl + ;`
 
 E.g.
 
@@ -16,24 +48,83 @@ E.g.
 * ExampleController.cs, ExampleLogic.cs, ExampleRepository.cs
 * IExample.cs, Example.cs
 
-<!-- <img alt="Open related files"
-      src="https://github.com/SmartyTomato/SmartOpen/blob/master/resources/img/readme/readme_1.png"> -->
-
-## Requirements
-
-Just install from the Vscode extension marketplace
-
 ## Extension Settings
 
-* `activatedTags`: Current activated tags from defined rules. Multiple rule can be applied. Use "all" apply all rules in the settings
-* `smartOpen.fileFilters`: (Remove) first item to Enable. Only include file name, full path and relative path with the given regexp, add this to significant reduce the calculation time
-* `smartOpen.ignoredFiles`: Ignored search path, add this to significant reduce the calculation time
-* `rules.builtIn`: Builtin rules. Use as you wish, just add it into activated tags
-* `rules.custom`: Custom rules. Don't forget add this into activatedTags to enable it
-  * `tags`: Array of tags use to identify the rule
-  * `order`: Result will show in this order. Smaller number wil show first. Default to 1 for a custom rule. If this large than 100, the result will in alphabetic order
-  * `breakChars`: The character that breaks in the file path
-  * `expressions`: Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow
+### Pin documents
+
+* `smartOpen.pinnedDocument.enabled`:
+  * Description: Enable pinned documents panel in explorer
+  * Default: true
+  * Options: true or false
+
+* `smartOpen.pinnedDocument.maintainPinnedDocuments`:
+  * Description: Should pinned documents maintained from last session after workspace closed or restarted
+  * Default: true
+  * Options: true or false
+
+* `smartOpen.pinnedDocument.maintainSortOrder`:
+  * Description: Should maintain sort order for pinned documents in the view when new document pinned
+  * Default: true
+  * Options: true or false
+
+* `smartOpen.pinnedDocument.pinnedDocuments`:
+  * Description: Pinned documents path
+  * Options: Don't edit this manually!
+
+* `smartOpen.pinnedDocument.sortBy`:
+  * Description: How the pinned documents should be sorted when `smartOpen.pinnedDocument.maintainSortOrder` is enabled
+  * Default: name
+  * Options: string as `name` or `type` (file type)
+
+### Open related files
+
+* `activatedTags`:
+  * Description: Activated rule's tags used for calculate related files. Use `all` apply all rules in the settings
+  * Default: all
+  * Options: `all`, any tag from `rules.builtIn` and `rules.custom`
+
+
+* `smartOpen.openRelatedFile.fileFilters`:
+  * Description: Filter file name, full path and relative path with given regex, this will significant reduce the calculation time. Copy over and remove first item `.*` to enable
+  * Default: `.*` allow any file
+  * Options: Javascript regular expression, will change this later
+
+* `smartOpen.openRelatedFile.ignoredFiles`:
+  * Description: Ignored search path, add this to significant reduce the calculation
+  * Default: Few common built in ones. E.g. node_modules, __*, .*, debug, build, release, etc
+  * Options: Javascript regular expression, will change this later
+
+* `rules.builtIn`:
+  * Description: Builtin rules. Use as you wish, just add tag into activated tags
+  * Default: Few common built in ones. E.g. Angular, Javascript, C#, C++, etc
+  * Options: Don't edit this. Add in `rules.custom` instead
+
+* `rules.custom`:
+  * Description: Custom rules. To add new one, copy built in rule and edit it. Don't forget add this into activatedTags to enable it
+  * Options: array of objects contains following properties. Look at `rules.builtIn` for example
+    * `tags`:
+      * Description: Array of string tags use to identify the rule.
+      * Default:
+      * Options: Usually use `language` plus `function`. E.g. ["`Javascript`", "`Angular`"]
+
+    * `order`:
+      * Description: Result will show in this order. Smaller number will show first.
+      * Default: 10
+      * Options: If number large than 100, the result will in alphabetic order
+
+    * `breakChars`:
+      * Description: The character that breaks in the file name into segments
+      * Default: `-`, `_`, `.`, `{Cap}`
+      * Options: Any character
+
+    * `expressions`:
+      * Description: Expressions to match file names, see `rules.builtIn` as example.
+      * Default:
+      * Options:
+        * `{1}` exact match.
+        * `{-1}` relative match.
+        * E.g. Test1 and Test you should use `Test{-1}`. Test1 and Test2 you should use `{-2}`.
+        * `{-1}` matching is very slow
 
 ## Known Issues
 
@@ -41,24 +132,21 @@ Just install from the Vscode extension marketplace
 
 Due to the single thread limitation, the performance for this extension depends on the number of files in the workspace. You will have performance issue for around 10k-20k files in the workspace. I will try to get as fast as possible. If you still have performance issue, try following:
 
-* In vscode settings, search for `smartOpen.fileFilters`. Remove the first element (which includes all), add the file type you want. Make sure `*` put `.*` as its Javascript RegExp
-* In vscode settings, search for `smartOpen.ignoredFiles`. Add folder you don't need to scan. This will significant improve performance. E.g. node_modules, .git
+* In vscode settings, search for `smartOpen.openRelatedFile.fileFilters`. Remove the first element (which includes all), add the file type you want. Make sure `*` put `.*` as its Javascript RegExp
+* In vscode settings, search for `smartOpen.openRelatedFile.ignoredFiles`. Add folder you don't need to scan. This will significant improve performance. E.g. node_modules, .git
 * Don't use similar comparison like {-1}, {-2}
 * Don't use `default` tag
 
 ## Release Notes
 
-!!! Critical bug fix
-
-## [1.2.0] - 2019-06-17
+## [1.3.0] - 2019-02-07
 
 ### Added
 
-* Add built in rule for Javascript, match js, css, less, etc
-* Add built in rule for C# Test, match Test.cs, Tests.cs
+* New feature! - Pin documents
+  * Pinned documents panel
+  * Editor right click context menu
 
-### Changed
-
-* Update built in rule for Angular, now will match files component, service, model
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.png" alt="Pinned documents">
 
 [CHANGELOG]: https://github.com/smartytomato/smartopen/CHANGELOG.md

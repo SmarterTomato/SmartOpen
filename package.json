@@ -1,8 +1,8 @@
 {
 	"name": "smartopen",
-	"displayName": "SmartOpen",
-	"description": "SmartOpen is an extension opens related files in the project",
-	"version": "1.2.3",
+	"displayName": "%displayName%",
+	"description": "%description%",
+	"version": "1.3.0",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -13,315 +13,404 @@
 	"icon": "resources/img/logo.png",
 	"repository": "https://github.com/SmartyTomato/SmartOpen/",
 	"activationEvents": [
-		"onCommand:smartOpen.openRelatedFile"
+		"onCommand:smartOpen.openRelatedFile.quickPick",
+		"onView:pinnedDocument"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
+		"commands": [{
+				"command": "smartOpen.openRelatedFile.quickPick",
+				"title": "%contributes.commands.smartOpen.openRelatedFile.quickPick%",
+				"category": "smartOpen.openRelatedFile"
+			},
 			{
-				"command": "smartOpen.openRelatedFile",
-				"title": "Open Related File"
+				"command": "smartOpen.pinnedDocument.editor.pin",
+				"title": "%contributes.commands.smartOpen.pinnedDocument.editor.pin%",
+				"category": "smartOpen.pinnedDocument"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.editor.unpin",
+				"title": "%contributes.commands.smartOpen.pinnedDocument.editor.unpin%",
+				"category": "smartOpen.pinnedDocument"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.quickPick",
+				"title": "%contributes.commands.smartOpen.pinnedDocument.quickPick%",
+				"category": "smartOpen.pinnedDocument"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.viewItem.open",
+				"title": "%contributes.commands.smartOpen.pinnedDocument.viewItem.open%",
+				"category": "smartOpen.pinnedDocument"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.viewItem.remove",
+				"title": "%contributes.commands.smartOpen.pinnedDocument.viewItem.remove%",
+				"category": "smartOpen.pinnedDocument"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.view.openAll",
+				"title": "%contributes.commands.smartOpen.pinnedDocument.view.openAll%",
+				"icon": {
+					"light": "resources/light/open-all.png",
+					"dark": "resources/dark/open-all.png"
+				},
+				"category": "smartOpen.pinnedDocument"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.view.clearAll",
+				"title": "%contributes.commands.smartOpen.pinnedDocument.view.clearAll%",
+				"icon": {
+					"light": "resources/light/clear-all.png",
+					"dark": "resources/dark/clear-all.png"
+				},
+				"category": "smartOpen.pinnedDocument"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.view.sortByName",
+				"title": "%contributes.commands.smartOpen.pinnedDocument.view.sortByName%",
+				"category": "smartOpen.pinnedDocument"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.view.sortByType",
+				"title": "%contributes.commands.smartOpen.pinnedDocument.view.sortByType%",
+				"category": "smartOpen.pinnedDocument"
 			}
 		],
-		"keybindings": [
-			{
-				"command": "smartOpen.openRelatedFile",
+		"keybindings": [{
+				"command": "smartOpen.openRelatedFile.quickPick",
 				"key": "ctrl+;",
 				"when": "editorTextFocus"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.editor.pin",
+				"key": "ctrl+'",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.editor.unpin",
+				"key": "ctrl+shift+'",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.quickPick",
+				"key": "ctrl+alt+'"
+			},
+			{
+				"command": "smartOpen.pinnedDocument.view.openAll",
+				"key": "ctrl+shift+alt+'"
 			}
 		],
-		"configuration": [
-			{
-				"title": "Smart Open",
-				"properties": {
-					"smartOpen.activatedTags": {
-						"type": "array",
-						"items": {
+		"views": {
+			"explorer": [{
+				"id": "pinnedDocument",
+				"name": "%contributes.views.explorer.pinnedDocument%",
+				"when": "config.smartOpen.pinnedDocument.enabled"
+			}]
+		},
+		"menus": {
+			"editor/title/context": [{
+					"command": "smartOpen.pinnedDocument.editor.pin",
+					"group": "navigation@0"
+				},
+				{
+					"command": "smartOpen.pinnedDocument.editor.unpin",
+					"group": "navigation@1"
+				}
+			],
+			"view/item/context": [{
+				"command": "smartOpen.pinnedDocument.viewItem.remove",
+				"group": "smartOpen.pinnedDocument.viewItem.action"
+			}],
+
+			"view/title": [{
+					"command": "smartOpen.pinnedDocument.view.openAll",
+					"group": "navigation@0"
+				},
+				{
+					"command": "smartOpen.pinnedDocument.view.clearAll",
+					"group": "navigation@1"
+				},
+				{
+					"command": "smartOpen.pinnedDocument.view.sortByName",
+					"group": "smartOpen.pinnedDocument.view.action@0"
+				},
+				{
+					"command": "smartOpen.pinnedDocument.view.sortByType",
+					"group": "smartOpen.pinnedDocument.view.action@1"
+				}
+			]
+		},
+		"configuration": [{
+			"title": "Smart Open",
+			"properties": {
+				"smartOpen.pinnedDocument.enabled": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable pinned document panel in explorer"
+				},
+				"smartOpen.pinnedDocument.maintainPinnedDocuments": {
+					"type": "boolean",
+					"default": true,
+					"description": "Should pinned documents maintained from last session after workspace closed"
+				},
+				"smartOpen.pinnedDocument.maintainSortOrder": {
+					"type": "boolean",
+					"default": false,
+					"description": "Should maintain sort order for pinned document"
+				},
+				"smartOpen.pinnedDocument.pinnedDocuments": {
+					"type": "array",
+					"description": "Pinned documents path. Don't edit this manually!!!"
+				},
+				"smartOpen.pinnedDocument.sortBy": {
+					"type": "string",
+					"default": "name",
+					"examples": ["name", "type"],
+					"description": "How the pinned documents should be sorted when `smartOpen.pinnedDocument.maintainSortOrder` is enabled"
+				},
+				"smartOpen.openRelatedFile.activatedTags": {
+					"type": "array",
+					"items": {
+						"tags": {
+							"type": "string",
+							"examples": [
+								"all",
+								"default"
+							],
+							"description": "Rule tags"
+						}
+					},
+					"uniqueItems": true,
+					"default": [
+						"all"
+					],
+					"description": "Activated rule's tags used for calculate related files. Use `all` apply all rules in the settings"
+				},
+				"smartOpen.openRelatedFile.fileFilters": {
+					"type": "array",
+					"items": {
+						"ignored": {
+							"type": "string",
+							"description": "RegExp string use to check file name, full path and relative path"
+						}
+					},
+					"uniqueItems": true,
+					"default": [
+						".*",
+						".*.ts",
+						".*.cs",
+						".*.xml",
+						".*.h",
+						".*.cpp",
+						".*.json",
+						".*.html",
+						".*.css",
+						".*.less",
+						".*.sass",
+						".*.js"
+					],
+					"description": "(Remove) first item to Enable. Only include file name, full path and relative path with the given regexp, add this to significant reduce the calculation time"
+				},
+				"smartOpen.openRelatedFile.ignoredFiles": {
+					"type": "array",
+					"items": {
+						"ignored": {
+							"type": "string",
+							"description": "RegExp string use to check file name, full path and relative path"
+						}
+					},
+					"uniqueItems": true,
+					"default": [
+						"\\..*",
+						"__.*",
+						"node_modules",
+						"[Dd]ebug",
+						"[Bb]in",
+						"[Bb]uild",
+						"[Rr]elease",
+						"[Ll]og",
+						"[Tt]est",
+						"out",
+						"coverages"
+					],
+					"description": "Ignored search path, add this to significant reduce the calculation time"
+				},
+				"smartOpen.openRelatedFile.rules.builtIn": {
+					"type": "array",
+					"items": {
+						"type": "object"
+					},
+					"description": "Builtin rules. Use as you wish, just add tag into activated tags. Don't edit this. Add in `rules.custom` instead",
+					"default": [{
+							"tags": [
+								"Default"
+							],
+							"order": 999,
+							"breakChars": [
+								"-",
+								"_",
+								".",
+								"{Cap}"
+							],
+							"expressions": [
+								"{-2}.{1}"
+							]
+						},
+						{
+							"tags": [
+								"Angular"
+							],
+							"order": 11,
+							"breakChars": [
+								"-",
+								"."
+							],
+							"expressions": [
+								"{1}.component.*",
+								"{1}.service.ts",
+								"{1}.model.ts"
+							]
+						},
+						{
+							"tags": [
+								"Angular"
+							],
+							"order": 12,
+							"breakChars": [
+								"-",
+								"."
+							],
+							"expressions": [
+								"{1}.{-2}.*"
+							]
+						},
+						{
+							"tags": [
+								"Javascript"
+							],
+							"order": 11,
+							"breakChars": [
+								"-"
+							],
+							"expressions": [
+								"{1}.*"
+							]
+						},
+						{
+							"tags": [
+								"C#", "C# Interface"
+							],
+							"order": 11,
+							"breakChars": [
+								"{Cap}"
+							],
+							"expressions": [
+								"I{1}.cs",
+								"{1}.cs"
+							]
+						},
+						{
+							"tags": [
+								"C#", "C# Test"
+							],
+							"order": 12,
+							"breakChars": [
+								"{Cap}"
+							],
+							"expressions": [
+								"{1}Test.cs",
+								"{1}Tests.cs",
+								"{1}.cs"
+							]
+						},
+						{
+							"tags": [
+								"C#", "C# Controller, Logic, Repository"
+							],
+							"order": 12,
+							"breakChars": [
+								"{Cap}"
+							],
+							"expressions": [
+								"{1}Controller.cs",
+								"{1}Logic.cs",
+								"{1}Repository.cs"
+							]
+						},
+						{
+							"tags": [
+								"C++"
+							],
+							"order": 12,
+							"breakChars": [
+								"{Cap}"
+							],
+							"expressions": [
+								"{1}.h",
+								"{1}.cpp"
+							]
+						}
+					]
+				},
+				"smartOpen.openRelatedFile.rules.custom": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
 							"tags": {
-								"type": "string",
-								"examples": [
-									"default"
-								],
-								"description": "Rule tags"
-							}
-						},
-						"uniqueItems": true,
-						"default": [
-							"all"
-						],
-						"description": "Current activated tags from defined rules. Multiple rule can be applied"
-					},
-					"smartOpen.fileFilters": {
-						"type": "array",
-						"items": {
-							"ignored": {
-								"type": "string",
-								"description": "RegExp string use to check file name, full path and relative path"
-							}
-						},
-						"uniqueItems": true,
-						"default": [
-							".*",
-							".*.ts",
-							".*.cs",
-							".*.xml",
-							".*.h",
-							".*.cpp",
-							".*.json",
-							".*.html",
-							".*.css",
-							".*.less",
-							".*.sass",
-							".*.js"
-						],
-						"description": "(Remove) first item to Enable. Only include file name, full path and relative path with the given regexp, add this to significant reduce the calculation time"
-					},
-					"smartOpen.ignoredFiles": {
-						"type": "array",
-						"items": {
-							"ignored": {
-								"type": "string",
-								"description": "RegExp string use to check file name, full path and relative path"
-							}
-						},
-						"uniqueItems": true,
-						"default": [
-							"\\..*",
-							"__.*",
-							"node_modules",
-							"[Dd]ebug",
-							"[Bb]in",
-							"[Bb]uild",
-							"[Rr]elease",
-							"[Ll]og",
-							"[Tt]est",
-							"out",
-							"coverages"
-						],
-						"description": "Ignored search path, add this to significant reduce the calculation time"
-					},
-					"smartOpen.rules.builtIn": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"properties": {
-								"tags": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									},
-									"uniqueItems": true,
-									"description": "Use to identify the rule"
+								"type": "array",
+								"items": {
+									"type": "string"
 								},
-								"order": {
-									"type": "integer",
-									"default": 10,
-									"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule. \nIf this large than 100, the result will in alphabetic order"
-								},
-								"breakChars": {
-									"type": "array",
-									"items": {
-										"type": "string",
-										"examples": [
-											"-",
-											"_",
-											".",
-											"{Cap}"
-										]
-									},
-									"uniqueItems": true,
-									"default": [
+								"uniqueItems": true,
+								"description": "Array of string tags use to identify the rule. Usually has two `language` (like Javascript) and `function` (like angular)"
+							},
+							"order": {
+								"type": "integer",
+								"default": 10,
+								"description": "Result will show in this order. Smaller number will show first.If number large than 100, the result will in alphabetic order"
+							},
+							"breakChars": {
+								"type": "array",
+								"items": {
+									"type": "string",
+									"examples": [
 										"-",
 										"_",
 										".",
 										"{Cap}"
-									],
-									"description": "The character that breaks in the file path"
+									]
 								},
-								"expressions": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									},
-									"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow"
-								}
-							},
-							"required": [
-								"tags",
-								"expressions"
-							],
-							"description": "Rule object"
-						},
-						"description": "Builtin rules. Use as you wish, just add it into activated tags",
-						"default": [
-							{
-								"tags": [
-									"Default"
-								],
-								"order": 999,
-								"breakChars": [
+								"uniqueItems": true,
+								"default": [
 									"-",
 									"_",
 									".",
 									"{Cap}"
 								],
-								"expressions": [
-									"{-2}.{1}"
-								]
+								"description": "The character that breaks in the file name into segments"
 							},
-							{
-								"tags": [
-									"Angular"
-								],
-								"order": 11,
-								"breakChars": [
-									"-",
-									"."
-								],
-								"expressions": [
-									"{1}.component.*",
-									"{1}.service.ts",
-									"{1}.model.ts"
-								]
-							},
-							{
-								"tags": [
-									"Angular"
-								],
-								"order": 12,
-								"breakChars": [
-									"-",
-									"."
-								],
-								"expressions": [
-									"{1}.{-2}.*"
-								]
-							},
-							{
-								"tags": [
-									"Javascript"
-								],
-								"order": 11,
-								"breakChars": [
-									"-"
-								],
-								"expressions": [
-									"{1}.*"
-								]
-							},
-							{
-								"tags": [
-									"C# Interface"
-								],
-								"order": 11,
-								"breakChars": [
-									"{Cap}"
-								],
-								"expressions": [
-									"I{1}.cs",
-									"{1}.cs"
-								]
-							},
-							{
-								"tags": [
-									"C# Test"
-								],
-								"order": 12,
-								"breakChars": [
-									"{Cap}"
-								],
-								"expressions": [
-									"{1}Test.cs",
-									"{1}Tests.cs",
-									"{1}.cs"
-								]
-							},
-							{
-								"tags": [
-									"C# Controller, Logic, Repository"
-								],
-								"order": 12,
-								"breakChars": [
-									"{Cap}"
-								],
-								"expressions": [
-									"{1}Controller.cs",
-									"{1}Logic.cs",
-									"{1}Repository.cs"
-								]
-							},
-							{
-								"tags": [
-									"C++"
-								],
-								"order": 12,
-								"breakChars": [
-									"{Cap}"
-								],
-								"expressions": [
-									"{1}.h",
-									"{1}.cpp"
-								]
+							"expressions": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "Expressions to match file names, see built in as example. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow"
 							}
-						]
-					},
-					"smartOpen.rules.custom": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"properties": {
-								"tags": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									},
-									"uniqueItems": true,
-									"description": "Use to identify the rule"
-								},
-								"order": {
-									"type": "integer",
-									"default": 10,
-									"description": "Result will show in this order. Smaller number wil show first. \nDefault to 1 for a custom rule. \nIf this large than 100, the result will in alphabetic order"
-								},
-								"breakChars": {
-									"type": "array",
-									"items": {
-										"type": "string",
-										"examples": [
-											"-",
-											"_",
-											".",
-											"{Cap}"
-										]
-									},
-									"uniqueItems": true,
-									"default": [
-										"-",
-										"_",
-										".",
-										"{Cap}"
-									],
-									"description": "The character that breaks in the file path"
-								},
-								"expressions": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									},
-									"description": "Expressions to match file names. {1} exact match. {-2} relative match, Test1 and Test = {-1}. Test1 and Test2 = {-2}. - matching is very slow"
-								}
-							},
-							"required": [
-								"tags",
-								"expressions"
-							],
-							"description": "Rule object"
 						},
-						"description": "Custom rules. Don't forget add this into activatedTags to enable it"
-					}
+						"required": [
+							"tags",
+							"expressions",
+							"breakChars",
+							"order"
+						],
+						"description": "Rule object"
+					},
+					"description": "Custom rules. Don't forget add this into activatedTags to enable it"
 				}
 			}
-		]
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

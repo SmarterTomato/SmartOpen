@@ -1,0 +1,17 @@
+{
+    "displayName":"Smart Open",
+    "description": "SmartOpen is an extension opens related files in the project",
+    "contributes.views.explorer.pinnedDocument": "Pinned Documents",
+
+    "contributes.commands.smartOpen.openRelatedFile.quickPick":"Open Related File",
+
+    "contributes.commands.smartOpen.pinnedDocument.editor.pin": "Pin",
+    "contributes.commands.smartOpen.pinnedDocument.editor.unpin": "Unpin",
+    "contributes.commands.smartOpen.pinnedDocument.quickPick": "Quick Open",
+    "contributes.commands.smartOpen.pinnedDocument.viewItem.open": "Open pinned document",
+    "contributes.commands.smartOpen.pinnedDocument.viewItem.remove": "Remove",
+    "contributes.commands.smartOpen.pinnedDocument.view.openAll": "Open All",
+    "contributes.commands.smartOpen.pinnedDocument.view.clearAll": "Clear All",
+    "contributes.commands.smartOpen.pinnedDocument.view.sortByName": "Sort By: Name",
+    "contributes.commands.smartOpen.pinnedDocument.view.sortByType": "Sort By: File Type"
+}

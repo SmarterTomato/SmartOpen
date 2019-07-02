@@ -1,0 +1,3 @@
+Bug
+- format regex
+- regex remove the need for . before *
