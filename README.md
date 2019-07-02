@@ -16,7 +16,7 @@ Send me through your configs I will make them built in.
 
 ### Pin documents
 
-<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.png" alt="Pinned documents">
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.jpg" alt="Pinned documents">
 
 Pin documents to the top of the explorer panel using shortcut and then quick pick pinned documents with shortcut to boost your productivity.
 
@@ -147,6 +147,6 @@ Due to the single thread limitation, the performance for this extension depends 
   * Pinned documents panel
   * Editor right click context menu
 
-<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.png" alt="Pinned documents">
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.jpg" alt="Pinned documents">
 
 [CHANGELOG]: https://github.com/smartytomato/smartopen/CHANGELOG.md
