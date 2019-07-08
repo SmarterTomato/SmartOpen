@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { Uri } from "vscode";
 
+import { utility } from "./utility";
 import { Rule } from "../openRelatedFile/model/rule";
 import { Config } from "./model/config";
 
@@ -49,6 +50,28 @@ class ConfigService {
         } else {
             return config.rules.filter(x => x.tags.some(p => config.activatedTags.includes(p)));
         }
+    }
+
+    getFileFilters(): Array<string> {
+        let config = this.get();
+
+        let filters = [];
+        for (let item of config.fileFilters) {
+            filters.push(utility.formatRegex(item));
+        }
+
+        return filters;
+    }
+
+    getIgnoredFiles(): Array<string> {
+        let config = this.get();
+
+        let ignoredFiles = [];
+        for (let item of config.ignoredFiles) {
+            ignoredFiles.push(utility.formatRegex(item));
+        }
+
+        return ignoredFiles;
     }
 
     updateSortBy(value: string) {

@@ -1,6 +1,6 @@
 {
-    "displayName":"Smart Open",
-    "description": "SmartOpen is an extension opens related files in the project",
+    "displayName":"SmartOpen",
+    "description": "SmartOpen is a vscode extension help user better manage opened documents",
     "contributes.views.explorer.pinnedDocument": "Pinned Documents",
 
     "contributes.commands.smartOpen.openRelatedFile.quickPick":"Open Related File",

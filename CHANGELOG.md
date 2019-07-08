@@ -1,6 +1,19 @@
 # Change Log
 
-## [1.3.0] - 2019-02-07
+## [1.3.2] - 2019-07-08
+
+### Changed
+
+* Extension now format regex for settings `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles`
+  * Now you can use `*`, `.`, `\` as normal
+  * Updated `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles` default values
+  * !!! You need update your regex as well.
+
+### Bug fixes
+
+* Could not remove pinned document if no editor opened
+
+## [1.3.0] - 2019-07-02
 
 ### Added
 
@@ -49,6 +62,3 @@
 * Add support for variables {number}, {-number},
 * Built in tag for Angular, Default, C#, C++
 * Allow custom tag to be created and used
-
-[Unreleased]: https://github.com/smartytomato/smartopen/changelog/unreleased.md
-[1.0.0]: https://github.com/smartytomato/smartopen/changelog/1.0.0.md

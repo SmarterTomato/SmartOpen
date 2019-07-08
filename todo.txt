@@ -1,3 +1,6 @@
 Bug
 - format regex
 - regex remove the need for . before *
+
+Fixes
+- Remove context menu if pinned document disabled

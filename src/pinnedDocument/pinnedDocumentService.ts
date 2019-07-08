@@ -67,7 +67,7 @@ class PinnedDocumentService {
      */
     unpinDocument(uri: Uri) {
         let activeTextEditor = vscode.window.activeTextEditor;
-        if (!activeTextEditor) {
+        if (!uri && !activeTextEditor) {
             vscode.window.showInformationMessage(`Unpin current document activated, but no active text editor`);
             console.log(`Unpin current document activated, but no active text editor`);
             return;

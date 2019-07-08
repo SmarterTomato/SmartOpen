@@ -16,7 +16,7 @@ Send me through your configs I will make them built in.
 
 ### Pin documents
 
-<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.jpg" alt="Pinned documents">
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.jpg" alt="Pinned documents"/>
 
 Pin documents to the top of the explorer panel using shortcut and then quick pick pinned documents with shortcut to boost your productivity.
 
@@ -38,7 +38,8 @@ Note:
 <img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_1.png" alt="">
 
 Shortcuts:
-Open related files using `Ctrl + ;`
+
+Open related files: `Ctrl + ;`
 
 E.g.
 
@@ -64,7 +65,7 @@ E.g.
 
 * `smartOpen.pinnedDocument.maintainSortOrder`:
   * Description: Should maintain sort order for pinned documents in the view when new document pinned
-  * Default: true
+  * Default: false
   * Options: true or false
 
 * `smartOpen.pinnedDocument.pinnedDocuments`:
@@ -139,14 +140,17 @@ Due to the single thread limitation, the performance for this extension depends 
 
 ## Release Notes
 
-## [1.3.0] - 2019-02-07
+### Changed
 
-### Added
+* Extension now format regex for settings `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles`
+  * Now you can use `*`, `.`, `\` as normal
+  * Updated `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles` default values
+  * !!! You need update your regex as well.
 
-* New feature! - Pin documents
-  * Pinned documents panel
-  * Editor right click context menu
+### Bug fixes
 
-<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.jpg" alt="Pinned documents">
+* Could not remove pinned document if no editor opened
 
-[CHANGELOG]: https://github.com/smartytomato/smartopen/CHANGELOG.md
+## Change Log
+
+[CHANGELOG](https://github.com/smartytomato/smartopen/CHANGELOG.md)
