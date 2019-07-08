@@ -22,5 +22,8 @@
     ],
 
     "editor.formatOnPaste": false,
-    "auto-close-tag.enableAutoCloseTag": false
+    "auto-close-tag.enableAutoCloseTag": false,
+
+    "smartOpen.pinnedDocument.pinnedDocuments": [],
+
 }

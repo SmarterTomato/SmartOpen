@@ -87,20 +87,20 @@
 			{
 				"command": "smartOpen.pinnedDocument.editor.pin",
 				"key": "ctrl+'",
-				"when": "editorTextFocus"
+				"when": "editorTextFocus && config.smartOpen.pinnedDocument.enabled"
 			},
 			{
 				"command": "smartOpen.pinnedDocument.editor.unpin",
 				"key": "ctrl+shift+'",
-				"when": "editorTextFocus"
+				"when": "editorTextFocus && config.smartOpen.pinnedDocument.enabled"
 			},
 			{
 				"command": "smartOpen.pinnedDocument.quickPick",
-				"key": "ctrl+alt+'"
+				"key": "ctrl+alt+' && config.smartOpen.pinnedDocument.enabled"
 			},
 			{
 				"command": "smartOpen.pinnedDocument.view.openAll",
-				"key": "ctrl+shift+alt+'"
+				"key": "ctrl+shift+alt+' && config.smartOpen.pinnedDocument.enabled"
 			}
 		],
 		"views": {
@@ -116,11 +116,13 @@
 			"editor/title/context": [
 				{
 					"command": "smartOpen.pinnedDocument.editor.pin",
-					"group": "navigation@0"
+					"group": "navigation@0",
+					"when": "config.smartOpen.pinnedDocument.enabled"
 				},
 				{
 					"command": "smartOpen.pinnedDocument.editor.unpin",
-					"group": "navigation@1"
+					"group": "navigation@1",
+					"when": "config.smartOpen.pinnedDocument.enabled"
 				}
 			],
 			"view/item/context": [
@@ -208,18 +210,18 @@
 						},
 						"uniqueItems": true,
 						"default": [
-							".*",
-							".*.ts",
-							".*.cs",
-							".*.xml",
-							".*.h",
-							".*.cpp",
-							".*.json",
-							".*.html",
-							".*.css",
-							".*.less",
-							".*.sass",
-							".*.js"
+							"*",
+							"*.ts",
+							"*.cs",
+							"*.xml",
+							"*.h",
+							"*.cpp",
+							"*.json",
+							"*.html",
+							"*.css",
+							"*.less",
+							"*.sass",
+							"*.js"
 						],
 						"description": "(Remove) first item to Enable. Only include file name, full path and relative path with the given regexp, add this to significant reduce the calculation time"
 					},
@@ -233,7 +235,7 @@
 						},
 						"uniqueItems": true,
 						"default": [
-							"\\..*",
+							"\\.*",
 							"__.*",
 							"node_modules",
 							"[Dd]ebug",

@@ -42,8 +42,10 @@ class OpenRelatedFileService {
         console.debug(`Active file >>> ${JSON.stringify(activeFile)}`);
 
         // Get configs for file filters
-        let config = configService.get();
-        let fileInfos = this.getAllFilesInCurrentWorkspace(config.fileFilters, config.ignoredFiles);
+        let fileInfos = this.getAllFilesInCurrentWorkspace(
+            configService.getFileFilters(),
+            configService.getIgnoredFiles(),
+        );
 
         // * Calculate related files
         let matchResults = this.getRelatedFiles(activeFile, fileInfos);
