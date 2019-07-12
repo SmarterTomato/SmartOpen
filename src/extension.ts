@@ -6,6 +6,7 @@ import { openRelatedFileService } from "./openRelatedFile/openRelatedFileService
 import { pinnedDocumentProvider } from "./pinnedDocument/pinnedDocumentProvider";
 import { pinnedDocumentService } from "./pinnedDocument/pinnedDocumentService";
 import { PinnedDocumentTreeItem } from "./pinnedDocument/model/pinnedDocumentTreeItem";
+import { SortType } from "./pinnedDocument/model/sortType";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

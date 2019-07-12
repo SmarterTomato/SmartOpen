@@ -5,6 +5,7 @@ import { PinnedDocumentQuickPickItem } from "./model/pinnedDocumentQuickPickItem
 import { PinnedDocumentTreeItem } from "./model/pinnedDocumentTreeItem";
 import { pinnedDocumentProvider } from "./pinnedDocumentProvider";
 import { configService } from "./../utils/configService";
+import { SortType } from "./model/sortType";
 
 let path = require("path");
 
@@ -148,7 +149,6 @@ class PinnedDocumentService {
         console.debug(`Opening all documents`);
 
         for (let item of this.pinnedDocuments) {
-
             this.openDocument(item.uri);
         }
     }
@@ -213,13 +213,7 @@ class PinnedDocumentService {
         this.pinnedDocuments = this.pinnedDocuments.sort((a, b) => {
             let nameA = path.basename(a.uri.fsPath);
             let nameB = path.basename(b.uri.fsPath);
-            if (nameA < nameB) {
-                return -1;
-            } else if (nameA === nameB) {
-                return 0;
-            } else {
-                return 1;
-            }
+            return nameA.localeCompare(nameB);
         });
 
         configService.updateSortBy(SortType.NAME.toString());
@@ -229,13 +223,7 @@ class PinnedDocumentService {
         this.pinnedDocuments = this.pinnedDocuments.sort((a, b) => {
             let typeA = path.extname(a.uri.fsPath);
             let typeB = path.extname(b.uri.fsPath);
-            if (typeA < typeB) {
-                return -1;
-            } else if (typeA === typeB) {
-                return 0;
-            } else {
-                return 1;
-            }
+            return typeA.localeCompare(typeB);
         });
 
         configService.updateSortBy(SortType.TYPE.toString());

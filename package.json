@@ -128,25 +128,30 @@
 			"view/item/context": [
 				{
 					"command": "smartOpen.pinnedDocument.viewItem.remove",
-					"group": "smartOpen.pinnedDocument.viewItem.action"
+					"group": "smartOpen.pinnedDocument.viewItem.action",
+					"when": "view == pinnedDocument"
 				}
 			],
 			"view/title": [
 				{
 					"command": "smartOpen.pinnedDocument.view.openAll",
-					"group": "navigation@0"
+					"group": "navigation@0",
+					"when": "view == pinnedDocument"
 				},
 				{
 					"command": "smartOpen.pinnedDocument.view.clearAll",
-					"group": "navigation@1"
+					"group": "navigation@1",
+					"when": "view == pinnedDocument"
 				},
 				{
 					"command": "smartOpen.pinnedDocument.view.sortByName",
-					"group": "smartOpen.pinnedDocument.view.action@0"
+					"group": "smartOpen.pinnedDocument.view.action.sort@0",
+					"when": "view == pinnedDocument"
 				},
 				{
 					"command": "smartOpen.pinnedDocument.view.sortByType",
-					"group": "smartOpen.pinnedDocument.view.action@1"
+					"group": "smartOpen.pinnedDocument.view.action.sort@1",
+					"when": "view == pinnedDocument"
 				}
 			]
 		},
