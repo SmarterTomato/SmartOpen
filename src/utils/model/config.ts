@@ -1,4 +1,5 @@
 import { Rule } from "../../openRelatedFile/model/rule";
+import { SortType } from "../../pinnedDocument/model/sortType";
 
 export class Config {
     activatedTags = new Array<string>();

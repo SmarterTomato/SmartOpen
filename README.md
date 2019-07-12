@@ -2,6 +2,24 @@
 
 Smart Open is a vscode extension help user better manage opened documents
 
+## Release Notes
+
+### Changed
+
+* Extension now format regex for settings `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles`
+  * Now you can use `*`, `.`, `\` as normal
+  * Updated `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles` default values
+  * !!! You need update your regex as well.
+
+### Bug fixes
+
+* Could not remove pinned document if no editor opened
+* SmartOpen menu appear on other extension
+
+## Change Log
+
+[CHANGELOG](https://github.com/smartytomato/smartopen/CHANGELOG.md)
+
 ## Contacts
 
 For any issues or suggestions, contact me via following method:
@@ -137,20 +155,3 @@ Due to the single thread limitation, the performance for this extension depends 
 * In vscode settings, search for `smartOpen.openRelatedFile.ignoredFiles`. Add folder you don't need to scan. This will significant improve performance. E.g. node_modules, .git
 * Don't use similar comparison like {-1}, {-2}
 * Don't use `default` tag
-
-## Release Notes
-
-### Changed
-
-* Extension now format regex for settings `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles`
-  * Now you can use `*`, `.`, `\` as normal
-  * Updated `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles` default values
-  * !!! You need update your regex as well.
-
-### Bug fixes
-
-* Could not remove pinned document if no editor opened
-
-## Change Log
-
-[CHANGELOG](https://github.com/smartytomato/smartopen/CHANGELOG.md)

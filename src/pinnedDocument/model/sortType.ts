@@ -1,4 +1,4 @@
-enum SortType {
+export enum SortType {
     NAME,
     TYPE,
 }
