@@ -96,11 +96,13 @@
 			},
 			{
 				"command": "smartOpen.pinnedDocument.quickPick",
-				"key": "ctrl+alt+' && config.smartOpen.pinnedDocument.enabled"
+				"key": "ctrl+alt+",
+				"when": "config.smartOpen.pinnedDocument.enabled"
 			},
 			{
 				"command": "smartOpen.pinnedDocument.view.openAll",
-				"key": "ctrl+shift+alt+' && config.smartOpen.pinnedDocument.enabled"
+				"key": "ctrl+shift+alt+",
+				"when": "config.smartOpen.pinnedDocument.enabled"
 			}
 		],
 		"views": {
