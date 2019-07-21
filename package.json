@@ -96,7 +96,7 @@
 			},
 			{
 				"command": "smartOpen.pinnedDocument.quickPick",
-				"key": "ctrl+alt+",
+				"key": "ctrl+alt+'",
 				"when": "config.smartOpen.pinnedDocument.enabled"
 			},
 			{
