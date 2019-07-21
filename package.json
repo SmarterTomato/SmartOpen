@@ -2,7 +2,7 @@
 	"name": "smartopen",
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -96,7 +96,7 @@
 			},
 			{
 				"command": "smartOpen.pinnedDocument.quickPick",
-				"key": "ctrl+alt+",
+				"key": "ctrl+alt+'",
 				"when": "config.smartOpen.pinnedDocument.enabled"
 			},
 			{
