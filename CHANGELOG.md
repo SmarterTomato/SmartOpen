@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.5.0] - 2019-08-02
+
+### Changed
+
+* Pinned document now save related path
+* Change pinned document json now stored into .vscode folder
+
 ## [1.3.2] - 2019-07-08
 
 ### Changed

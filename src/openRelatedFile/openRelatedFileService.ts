@@ -4,8 +4,8 @@ import { configService } from "../utils/configService";
 import { openRelatedFileLogic } from "./openRelatedFileLogic";
 import { FileInfoQuickPickItem, FileInfo, MatchResult } from "./model/fileInfo";
 
-let fileSystem = require("fs");
-let path = require("path");
+import * as fileSystem from "fs";
+import * as path from "path";
 
 class OpenRelatedFileService {
     caching = false;

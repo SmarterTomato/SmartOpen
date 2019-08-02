@@ -1,6 +1,7 @@
+Features
+* Save pinned document as relative path rather than exact path
+* Save pinned document to "smart-open.json" in folder ".vscode" at root
+
 Bug
-- format regex
-- regex remove the need for . before *
 
 Fixes
-- Remove context menu if pinned document disabled

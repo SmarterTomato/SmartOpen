@@ -58,15 +58,6 @@ E.g.
   * Default: false
   * Options: true or false
 
-* `smartOpen.pinnedDocument.pinnedDocuments`:
-  * Description: Pinned documents path
-  * Options: Don't edit this manually!
-
-* `smartOpen.pinnedDocument.sortBy`:
-  * Description: How the pinned documents should be sorted when `smartOpen.pinnedDocument.maintainSortOrder` is enabled
-  * Default: name
-  * Options: string as `name` or `type` (file type)
-
 ### Open related files
 
 * `activatedTags`:
@@ -142,15 +133,8 @@ Send me through your configs I will make them built in.
 
 ### Changed
 
-* Extension now format regex for settings `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles`
-  * Now you can use `*`, `.`, `\` as normal
-  * Updated `smartOpen.openRelatedFile.fileFilters` and `smartOpen.openRelatedFile.ignoredFiles` default values
-  * !!! You need update your regex as well.
-
-### Bug fixes
-
-* Could not remove pinned document if no editor opened
-* SmartOpen menu appear on other extension
+* Pinned document now save related path
+* Change pinned document json now stored into .vscode folder
 
 ## Change Log
 

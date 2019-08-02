@@ -24,6 +24,10 @@
 		"moduleResolution": "node",
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
+
+		// for json
+		"resolveJsonModule": true,
+		"esModuleInterop": true
 	},
 	"exclude": [
 		"node_modules",

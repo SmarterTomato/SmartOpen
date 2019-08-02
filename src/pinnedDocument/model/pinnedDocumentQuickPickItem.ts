@@ -1,11 +1,10 @@
 import { QuickPickItem, Uri } from "vscode";
-
-let path = require("path");
+import * as path from "path";
 
 export class PinnedDocumentQuickPickItem implements QuickPickItem {
     label: string;
     description: string;
-    
+
     uri: Uri;
 
     constructor(uri: Uri) {

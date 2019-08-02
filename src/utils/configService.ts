@@ -1,11 +1,18 @@
 import * as vscode from "vscode";
 import { Uri } from "vscode";
+import * as fs from "fs";
 
 import { utility } from "./utility";
 import { Rule } from "../openRelatedFile/model/rule";
 import { Config } from "./model/config";
 
+const defaultConfig: any = {
+    pinnedDocument: { sortBy: "", pinnedDocuments: null },
+};
+
 class ConfigService {
+    configFilePath = vscode.workspace.rootPath + "/.vscode/smartopen.json";
+
     get(): Config {
         console.debug(`Loading configs`);
 
@@ -29,10 +36,16 @@ class ConfigService {
 
             // #region pinnedDocument
 
-            config.sortBy = workspaceConfig.get("smartOpen.pinnedDocument.sortBy");
-            config.maintainSortOrder = workspaceConfig.get("smartOpen.pinnedDocument.maintainSortOrder");
             config.maintainPinnedDocuments = workspaceConfig.get("smartOpen.pinnedDocument.maintainPinnedDocuments");
-            config.pinnedDocuments = workspaceConfig.get("smartOpen.pinnedDocument.pinnedDocuments");
+            config.maintainSortOrder = workspaceConfig.get("smartOpen.pinnedDocument.maintainSortOrder");
+
+            try {
+                config.sortBy = this.getConfig().pinnedDocument.sortBy;
+                config.pinnedDocuments = this.getConfig().pinnedDocument.pinnedDocuments;
+            } catch (error) {
+                console.error(`File read failed: ${error}`);
+                this.writeConfig(JSON.stringify(defaultConfig));
+            }
 
             // #endregion pinnedDocument
         } catch (error) {
@@ -75,11 +88,38 @@ class ConfigService {
     }
 
     updateSortBy(value: string) {
-        vscode.workspace.getConfiguration().update("smartOpen.pinnedDocument.sortBy", value);
+        let data: any = this.getConfig();
+        data.pinnedDocument.sortBy = value;
+        this.writeConfig(JSON.stringify(data));
     }
 
     updatePinnedDocuments(value: Array<string>) {
-        vscode.workspace.getConfiguration().update("smartOpen.pinnedDocument.pinnedDocuments", value);
+        let data: any = this.getConfig();
+        data.pinnedDocument.pinnedDocuments = value;
+        this.writeConfig(JSON.stringify(data));
+    }
+
+    private getConfig(): any {
+        if (!fs.existsSync(this.configFilePath)) {
+            fs.writeFile(this.configFilePath, defaultConfig, () => {});
+            return {};
+        }
+
+        try {
+            let config = fs.readFileSync(this.configFilePath).toString();
+            return JSON.parse(config);
+        } catch (err) {
+            console.error(`File read failed: ${err}`);
+            return {};
+        }
+    }
+
+    private writeConfig(data: string) {
+        try {
+            fs.writeFile(this.configFilePath, data, () => {});
+        } catch (err) {
+            console.error(`File write failed: ${err}`);
+        }
     }
 }
 
