@@ -2,7 +2,7 @@
 	"name": "smartopen",
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
