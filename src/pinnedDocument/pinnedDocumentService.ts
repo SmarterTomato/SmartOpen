@@ -1,13 +1,12 @@
 import * as vscode from "vscode";
 import { Uri } from "vscode";
+import * as path from "path";
 
 import { PinnedDocumentQuickPickItem } from "./model/pinnedDocumentQuickPickItem";
 import { PinnedDocumentTreeItem } from "./model/pinnedDocumentTreeItem";
 import { pinnedDocumentProvider } from "./pinnedDocumentProvider";
 import { configService } from "./../utils/configService";
 import { SortType } from "./model/sortType";
-
-let path = require("path");
 
 class PinnedDocumentService {
     pinnedDocuments: Array<PinnedDocumentTreeItem> = [];
@@ -173,10 +172,19 @@ class PinnedDocumentService {
      * Save pinned documents to config
      */
     save() {
+        const rootPath = vscode.workspace.rootPath;
+        if (!rootPath) {
+            return;
+        }
+
         let config = configService.get();
+
         // * If the save option is turned on
         if (config.maintainPinnedDocuments) {
-            let paths = this.pinnedDocuments.map(x => x.uri.fsPath);
+            let paths = this.pinnedDocuments.map(x => {
+                let relativePath = path.relative(rootPath, x.uri.fsPath);
+                return relativePath;
+            });
             configService.updatePinnedDocuments(paths);
         }
     }
@@ -233,12 +241,18 @@ class PinnedDocumentService {
      * Load saved pinned documents from last session
      */
     private load() {
+        const rootPath = vscode.workspace.rootPath;
+        if (!rootPath) {
+            return;
+        }
+
         let config = configService.get();
         if (config.maintainPinnedDocuments && config.pinnedDocuments) {
             let documents = config.pinnedDocuments;
             for (let doc of documents) {
                 let name = path.basename(doc);
-                let uri = Uri.file(doc);
+                let fileName = rootPath + "\\" + doc;
+                let uri = Uri.file(fileName);
                 let item = new PinnedDocumentTreeItem(
                     uri,
                     name,

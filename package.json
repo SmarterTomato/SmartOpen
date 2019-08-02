@@ -2,7 +2,7 @@
 	"name": "smartopen",
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -176,10 +176,6 @@
 						"default": false,
 						"description": "Should maintain sort order for pinned document"
 					},
-					"smartOpen.pinnedDocument.pinnedDocuments": {
-						"type": "array",
-						"description": "Pinned documents path. Don't edit this manually!!!"
-					},
 					"smartOpen.pinnedDocument.sortBy": {
 						"type": "string",
 						"default": "name",
@@ -242,7 +238,7 @@
 						},
 						"uniqueItems": true,
 						"default": [
-							"\\.*",
+							".*",
 							"__.*",
 							"node_modules",
 							"[Dd]ebug",
@@ -251,6 +247,7 @@
 							"[Rr]elease",
 							"[Ll]og",
 							"[Tt]est",
+							"[Dd]ist",
 							"out",
 							"coverages"
 						],
