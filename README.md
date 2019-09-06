@@ -4,9 +4,20 @@ Smart Open is a vscode extension help user better manage opened documents
 
 ## Features
 
+### Sync with explorer
+
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/sync_active_document.gif" alt="Sync active document">
+
+Sync active document with explorer, so you can locate your file quickly.
+vscode removed this feature since 07/2019
+
+Shortcuts:
+
+* Sync with explorer: `Ctrl + Alt + ;`
+
 ### Pin documents
 
-<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.jpg" alt="Pinned documents"/>
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/pin_document.gif" alt="Pinned documents">
 
 Pin documents to the top of the explorer panel using shortcut and then quick pick pinned documents with shortcut to boost your productivity.
 
@@ -25,7 +36,7 @@ Note:
 
 ### Open related files
 
-<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_1.png" alt="">
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/open_related_documents.gif" alt="Open related documents">
 
 Shortcuts:
 
@@ -40,6 +51,13 @@ E.g.
 * IExample.cs, Example.cs
 
 ## Extension Settings
+
+### Sync with explorer
+
+* `smartOpen.syncActiveDocument.enabled`:
+  * Description: Enable sync with explorer
+  * Default: true
+  * Options: true or false
 
 ### Pin documents
 
@@ -131,10 +149,16 @@ Send me through your configs I will make them built in.
 
 ## Release Notes
 
-### Changed
+### Added
 
-* Pinned document now save related path
-* Change pinned document json now stored into .vscode folder
+* New feature! - Sync with explorer `Ctrl + Alt + ;`
+  * Sync active document with explorer (vscode removed this feature we loved since 07/2019)
+
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/sync_active_document.gif" alt="Sync active document">
+
+* Add open related file to editor context menu
+
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/open_related_documents.gif" alt="Open related documents">
 
 ## Change Log
 

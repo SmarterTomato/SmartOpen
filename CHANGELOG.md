@@ -1,5 +1,18 @@
 # Change Log
 
+## [1.6.0] - 2019-09-05
+
+### Added
+
+* New feature! - Sync with explorer `Ctrl + Alt + ;`
+  * Sync active document with explorer (vscode removed this feature we loved since 07/2019)
+
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/sync_active_document.gif" alt="Sync active document">
+
+* Add open related file to editor context menu
+
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/open_related_documents.gif" alt="Open related documents">
+
 ## [1.5.0] - 2019-08-02
 
 ### Changed
@@ -28,7 +41,7 @@
   * Pinned documents panel
   * Editor right click context menu
 
-<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/readme_2.jpg" alt="Pinned documents">
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/pin_document.gif" alt="Pinned documents">
 
 ## [1.2.0] - 2019-06-17
 
@@ -69,3 +82,5 @@
 * Add support for variables {number}, {-number},
 * Built in tag for Angular, Default, C#, C++
 * Allow custom tag to be created and used
+
+<img src="https://raw.githubusercontent.com/SmartyTomato/SmartOpen/master/resources/img/readme/open_related_documents.gif" alt="Open related documents">

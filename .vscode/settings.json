@@ -23,7 +23,4 @@
 
     "editor.formatOnPaste": false,
     "auto-close-tag.enableAutoCloseTag": false,
-
-    "smartOpen.pinnedDocument.pinnedDocuments": [],
-
 }

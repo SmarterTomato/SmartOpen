@@ -3,15 +3,16 @@
     "description": "SmartOpen is a vscode extension help user better manage opened documents",
     "contributes.views.explorer.pinnedDocument": "Pinned Documents",
 
-    "contributes.commands.smartOpen.openRelatedFile.quickPick":"Open Related File",
+    "contributes.commands.smartOpen.syncActiveDocument":"Sync with Explorer",
+    "contributes.commands.smartOpen.openRelatedFile":"Open Related File",
 
-    "contributes.commands.smartOpen.pinnedDocument.editor.pin": "Pin",
-    "contributes.commands.smartOpen.pinnedDocument.editor.unpin": "Unpin",
+    "contributes.commands.smartOpen.pinnedDocument.pin": "Pin",
+    "contributes.commands.smartOpen.pinnedDocument.unpin": "Unpin",
     "contributes.commands.smartOpen.pinnedDocument.quickPick": "Quick Open",
-    "contributes.commands.smartOpen.pinnedDocument.viewItem.open": "Open pinned document",
-    "contributes.commands.smartOpen.pinnedDocument.viewItem.remove": "Remove",
-    "contributes.commands.smartOpen.pinnedDocument.view.openAll": "Open All",
-    "contributes.commands.smartOpen.pinnedDocument.view.clearAll": "Clear All",
-    "contributes.commands.smartOpen.pinnedDocument.view.sortByName": "Sort By: Name",
-    "contributes.commands.smartOpen.pinnedDocument.view.sortByType": "Sort By: File Type"
+    "contributes.commands.smartOpen.pinnedDocument.open": "Open pinned document",
+    "contributes.commands.smartOpen.pinnedDocument.remove": "Remove",
+    "contributes.commands.smartOpen.pinnedDocument.openAll": "Open All",
+    "contributes.commands.smartOpen.pinnedDocument.clearAll": "Clear All",
+    "contributes.commands.smartOpen.pinnedDocument.sortByName": "Sort By: Name",
+    "contributes.commands.smartOpen.pinnedDocument.sortByType": "Sort By: File Type"
 }
