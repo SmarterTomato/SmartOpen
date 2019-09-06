@@ -22,10 +22,18 @@ export function activate(context: ExtensionContext) {
     // #region Open related files
 
     // * Open related files
-    let openRelatedFileDisposable = vscode.commands.registerCommand("smartOpen.openRelatedFile.quickPick", () => {
+    const syncActiveDocumentDisposable = vscode.commands.registerCommand("smartOpen.syncActiveDocument", () => {
+        console.debug(`Sync active document started`);
+
+        openRelatedFileService.syncActiveDocument();
+    });
+    context.subscriptions.push(syncActiveDocumentDisposable);
+
+    // * Open related files
+    const openRelatedFileDisposable = vscode.commands.registerCommand("smartOpen.openRelatedFile", (uri: Uri) => {
         console.debug(`Open related file started`);
 
-        openRelatedFileService.openRelatedFile();
+        openRelatedFileService.openRelatedFile(uri);
     });
     context.subscriptions.push(openRelatedFileDisposable);
 
@@ -37,7 +45,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(vscode.window.registerTreeDataProvider("pinnedDocument", pinnedDocumentProvider));
 
     // * Show quick pick pinned document
-    let quickPickPinnedDocumentDisposable = vscode.commands.registerCommand(
+    const quickPickPinnedDocumentDisposable = vscode.commands.registerCommand(
         "smartOpen.pinnedDocument.quickPick",
         () => {
             console.debug(`Quick pick pinned documents started`);
@@ -48,7 +56,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(quickPickPinnedDocumentDisposable);
 
     // * Pin document
-    let pinDocumentDisposable = vscode.commands.registerCommand("smartOpen.pinnedDocument.editor.pin", (uri: Uri) => {
+    const pinDocumentDisposable = vscode.commands.registerCommand("smartOpen.pinnedDocument.pin", (uri: Uri) => {
         console.debug(`Pin document started`);
 
         pinnedDocumentService.pinDocument(uri);
@@ -56,30 +64,24 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(pinDocumentDisposable);
 
     // * Unpin document
-    let unpinDocumentDisposable = vscode.commands.registerCommand(
-        "smartOpen.pinnedDocument.editor.unpin",
-        (uri: Uri) => {
-            console.debug(`Unpin document started`);
+    const unpinDocumentDisposable = vscode.commands.registerCommand("smartOpen.pinnedDocument.unpin", (uri: Uri) => {
+        console.debug(`Unpin document started`);
 
-            pinnedDocumentService.unpinDocument(uri);
-        },
-    );
+        pinnedDocumentService.unpinDocument(uri);
+    });
     context.subscriptions.push(unpinDocumentDisposable);
 
     // * Open pinned document
-    let openPinnedDocumentDisposable = vscode.commands.registerCommand(
-        "smartOpen.pinnedDocument.viewItem.open",
-        uri => {
-            console.debug(`Open pinned document started`);
+    const openPinnedDocumentDisposable = vscode.commands.registerCommand("smartOpen.pinnedDocument.open", uri => {
+        console.debug(`Open pinned document started`);
 
-            pinnedDocumentService.openDocument(uri);
-        },
-    );
+        pinnedDocumentService.openDocument(uri);
+    });
     context.subscriptions.push(openPinnedDocumentDisposable);
 
     // * Remove pinned document
-    let removePinnedDocumentDisposable = vscode.commands.registerCommand(
-        "smartOpen.pinnedDocument.viewItem.remove",
+    const removePinnedDocumentDisposable = vscode.commands.registerCommand(
+        "smartOpen.pinnedDocument.remove",
         (treeItem: PinnedDocumentTreeItem) => {
             console.debug(`Remove pinned document started`);
 
@@ -89,19 +91,16 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(removePinnedDocumentDisposable);
 
     // * Open all pinned documents
-    let openAllPinnedDocumentsDisposable = vscode.commands.registerCommand(
-        "smartOpen.pinnedDocument.view.openAll",
-        () => {
-            console.debug(`Open all pinned documents started`);
+    const openAllPinnedDocumentsDisposable = vscode.commands.registerCommand("smartOpen.pinnedDocument.openAll", () => {
+        console.debug(`Open all pinned documents started`);
 
-            pinnedDocumentService.openAll();
-        },
-    );
+        pinnedDocumentService.openAll();
+    });
     context.subscriptions.push(openAllPinnedDocumentsDisposable);
 
     // * Open all pinned documents
-    let clearAllPinnedDocumentsDisposable = vscode.commands.registerCommand(
-        "smartOpen.pinnedDocument.view.clearAll",
+    const clearAllPinnedDocumentsDisposable = vscode.commands.registerCommand(
+        "smartOpen.pinnedDocument.clearAll",
         () => {
             console.debug(`Clear all pinned documents started`);
 
@@ -111,7 +110,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(clearAllPinnedDocumentsDisposable);
 
     // * Sort by name
-    let sortByNameDisposable = vscode.commands.registerCommand("smartOpen.pinnedDocument.view.sortByName", () => {
+    const sortByNameDisposable = vscode.commands.registerCommand("smartOpen.pinnedDocument.sortByName", () => {
         console.debug(`Sort by name started`);
 
         pinnedDocumentService.sortBy(SortType.NAME);
@@ -119,7 +118,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(sortByNameDisposable);
 
     // * Sort by type
-    let sortByTypeDisposable = vscode.commands.registerCommand("smartOpen.pinnedDocument.view.sortByType", () => {
+    const sortByTypeDisposable = vscode.commands.registerCommand("smartOpen.pinnedDocument.sortByType", () => {
         console.debug(`Sort by type started`);
 
         pinnedDocumentService.sortBy(SortType.TYPE);

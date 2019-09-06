@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { Uri } from "vscode";
 
 import { configService } from "../utils/configService";
 import { openRelatedFileLogic } from "./openRelatedFileLogic";
@@ -14,7 +15,7 @@ class OpenRelatedFileService {
     /**
      * Show quick pick for files that related to the active document
      */
-    openRelatedFile() {
+    openRelatedFile(uri: Uri) {
         // * Should only active when focus on text editor
         let activeTextEditor = vscode.window.activeTextEditor;
         if (!activeTextEditor) {
@@ -26,8 +27,13 @@ class OpenRelatedFileService {
             return;
         }
 
+        // * If uri not provided, use active document instead
+        if (!uri) {
+            uri = activeTextEditor.document.uri;
+        }
+
         // * Show related file only available for workspace
-        let workspaceFolder = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
+        let workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
         if (!workspaceFolder) {
             vscode.window.showInformationMessage(`Active text editor not belongs to workspace`);
             console.log(`Active text editor not belongs to workspace`);
@@ -36,9 +42,9 @@ class OpenRelatedFileService {
 
         // * Init info active documnet
         console.debug(`Getting active file`);
-        let name = path.basename(activeTextEditor.document.fileName);
-        let relativePath = path.relative(workspaceFolder.uri.fsPath, activeTextEditor.document.fileName);
-        let activeFile = new FileInfo(name, activeTextEditor.document.fileName, relativePath);
+        let name = path.basename(uri.fsPath);
+        let relativePath = path.relative(workspaceFolder.uri.fsPath, uri.fsPath);
+        let activeFile = new FileInfo(name, uri.fsPath, relativePath);
         console.debug(`Active file >>> ${JSON.stringify(activeFile)}`);
 
         // Get configs for file filters
@@ -65,6 +71,26 @@ class OpenRelatedFileService {
         });
 
         this.showQuickPick(activeFile, matchResults);
+    }
+
+    /**
+     * Show active file in explorer
+     */
+    syncActiveDocument() {
+        // * Should only active when focus on text editor
+        const activeTextEditor = vscode.window.activeTextEditor;
+        if (!activeTextEditor) {
+            // This should not happen right now due to the shortcut binding
+            // Don't do anything if not text editor for now
+            // List all files later if needed
+            vscode.window.showInformationMessage(`Sync active document activated, but no active text editor`);
+            console.log(`Sync active document activated, but no active text editor`);
+            return;
+        }
+
+        // * run the build in comment to sync active document to explorer
+        vscode.commands.executeCommand("workbench.files.action.showActiveFileInExplorer");
+        console.debug(`Sync active document completed`);
     }
 
     /**

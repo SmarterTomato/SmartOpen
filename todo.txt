@@ -1,6 +1,4 @@
 Features
-* Save pinned document as relative path rather than exact path
-* Save pinned document to "smart-open.json" in folder ".vscode" at root
 
 Bug
 
