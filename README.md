@@ -149,7 +149,16 @@ Send me through your configs I will make them built in.
 
 ## Release Notes
 
-### Added
+### [1.6.1] - 2019-09-11
+
+#### Bug fixes
+
+* Click on pinned document not opening the editor
+* Sort function not cause extension fail
+
+### [1.6.0] - 2019-09-05
+
+#### Added
 
 * New feature! - Sync with explorer `Ctrl + Alt + ;`
   * Sync active document with explorer (vscode removed this feature we loved since 07/2019)

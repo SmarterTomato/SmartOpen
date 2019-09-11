@@ -6,7 +6,7 @@ import { Rule } from "../openRelatedFile/model/rule";
 import { Config } from "./model/config";
 
 const defaultConfig: any = {
-    pinnedDocument: { sortBy: "", pinnedDocuments: null },
+    pinnedDocument: { sortBy: "0", pinnedDocuments: [] },
 };
 
 class ConfigService {
@@ -86,12 +86,6 @@ class ConfigService {
         return ignoredFiles;
     }
 
-    updateSortBy(value: string) {
-        let data: any = this.getConfig();
-        data.pinnedDocument.sortBy = value;
-        this.writeConfig(JSON.stringify(data));
-    }
-
     updatePinnedDocuments(value: Array<string>) {
         let data: any = this.getConfig();
         data.pinnedDocument.pinnedDocuments = value;
@@ -115,7 +109,7 @@ class ConfigService {
 
     private writeConfig(data: string) {
         try {
-            fs.writeFile(this.configFilePath, data, () => {});
+            fs.writeFileSync(this.configFilePath, data, "utf8");
         } catch (err) {
             console.error(`File write failed: ${err}`);
         }
