@@ -49,7 +49,7 @@ class PinnedDocumentService {
             name,
             {
                 title: "Open pinned document",
-                command: "smartOpen.pinnedDocument.viewItem.open",
+                command: "smartOpen.pinnedDocument.open",
                 arguments: [uri],
             },
             "smartOpen.pinnedDocument.viewItem.remove",
@@ -223,8 +223,6 @@ class PinnedDocumentService {
             let nameB = path.basename(b.uri.fsPath);
             return nameA.localeCompare(nameB);
         });
-
-        configService.updateSortBy(SortType.NAME.toString());
     }
 
     private sortByType() {
@@ -233,8 +231,6 @@ class PinnedDocumentService {
             let typeB = path.extname(b.uri.fsPath);
             return typeA.localeCompare(typeB);
         });
-
-        configService.updateSortBy(SortType.TYPE.toString());
     }
 
     /**
@@ -258,7 +254,7 @@ class PinnedDocumentService {
                     name,
                     {
                         title: "Open pinned document",
-                        command: "smartOpen.pinnedDocument.viewItem.open",
+                        command: "smartOpen.pinnedDocument.open",
                         arguments: [uri],
                     },
                     "smartOpen.pinnedDocument.viewItem.remove",
