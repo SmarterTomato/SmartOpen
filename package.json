@@ -2,7 +2,7 @@
 	"name": "smartopen",
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "1.6.1",
+	"version": "1.6.4",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -116,7 +116,7 @@
 			},
 			{
 				"command": "smartOpen.pinnedDocument.openAll",
-				"key": "ctrl+shift+alt+",
+				"key": "ctrl+shift+alt+'",
 				"when": "config.smartOpen.pinnedDocument.enabled"
 			}
 		],
@@ -358,6 +358,7 @@
 								],
 								"order": 11,
 								"breakChars": [
+									"{Cap}",
 									"-",
 									"."
 								],
