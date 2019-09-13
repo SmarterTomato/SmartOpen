@@ -149,6 +149,12 @@ Send me through your configs I will make them built in.
 
 ## Release Notes
 
+## [1.6.2] - 2019-09-13
+
+## Bug fixes
+
+* Open all pinned document shortcut not working
+
 ### [1.6.1] - 2019-09-11
 
 #### Bug fixes

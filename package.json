@@ -116,7 +116,7 @@
 			},
 			{
 				"command": "smartOpen.pinnedDocument.openAll",
-				"key": "ctrl+shift+alt+",
+				"key": "ctrl+shift+alt+'",
 				"when": "config.smartOpen.pinnedDocument.enabled"
 			}
 		],
@@ -358,6 +358,7 @@
 								],
 								"order": 11,
 								"breakChars": [
+									"{Cap}",
 									"-",
 									"."
 								],
