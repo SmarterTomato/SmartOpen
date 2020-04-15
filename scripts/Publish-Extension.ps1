@@ -1,2 +1,2 @@
 # Publish extension
-Invoke-Expression "vsce publish 1.6.2"
+Invoke-Expression "vsce publish 1.6.6"

@@ -1,4 +1,6 @@
 Features
+save button next to the sync button
+
 
 Bug
 
