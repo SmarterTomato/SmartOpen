@@ -14,7 +14,6 @@ class OpenRelatedFileLogic {
      * @returns - match result
      */
     analysisFile(file: FileInfo, rule: Rule): MatchResult {
-        console.debug(`Analysing file >>> ${file.relativePath}`);
         let result = new MatchResult(file, rule);
 
         let name = file.name;
@@ -95,7 +94,6 @@ class OpenRelatedFileLogic {
 
             // - only the first match needed
             result.isMatch = true;
-            console.debug(`File matched Matched expression >>> ${expression}`);
             break;
         }
 
@@ -108,10 +106,6 @@ class OpenRelatedFileLogic {
      * @param file2
      */
     areFileInfosMatch(file1: MatchResult, file2: MatchResult): boolean {
-        console.debug(
-            `Comparing file infos >>> file1=${file1.fileInfo.relativePath} | file2=${file2.fileInfo.relativePath}`,
-        );
-
         // - for {-1}
         let variableSegments1 = file1.segments.filter(x => x.expression.match(this.expressionSimilarRegExp));
         let variableSegments2 = file2.segments.filter(x => x.expression.match(this.expressionSimilarRegExp));
@@ -130,9 +124,6 @@ class OpenRelatedFileLogic {
                 let count = this.calculateDifference(array1, array2);
 
                 if (count > max) {
-                    console.debug(
-                        `Exceed the max allowed difference >>> seg1=${seg1.value} | seg2=${seg2.value} | max=${max}`,
-                    );
                     return false;
                 }
             }
@@ -144,13 +135,11 @@ class OpenRelatedFileLogic {
         for (const seg1 of variableSegments1) {
             for (const seg2 of variableSegments2) {
                 if (seg1.value !== seg2.value) {
-                    console.debug(`Segments are different >>> seg1=${seg1.value} | seg2=${seg2.value}`);
                     return false;
                 }
             }
         }
 
-        console.debug(`Files are matched`);
         return true;
     }
 

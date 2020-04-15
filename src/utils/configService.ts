@@ -13,7 +13,6 @@ class ConfigService {
     configFilePath = vscode.workspace.rootPath + "/.vscode/smartopen.json";
 
     get(): Config {
-        console.debug(`Loading configs`);
 
         let config = new Config();
         try {
@@ -51,7 +50,6 @@ class ConfigService {
             console.exception(`Could not load configurations: ${error.toString()}`);
         }
 
-        console.debug(`Configs loaded, ${config.rules} rules available`);
         return config;
     }
 
@@ -59,6 +57,8 @@ class ConfigService {
         let config = this.get();
         if (config.activatedTags.includes("all")) {
             return config.rules;
+        } else if (config.activatedTags.includes("no default")) {
+            return config.rules.filter(x => !x.tags.some(x => x === "Default"));
         } else {
             return config.rules.filter(x => x.tags.some(p => config.activatedTags.includes(p)));
         }

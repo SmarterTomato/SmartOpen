@@ -41,11 +41,9 @@ class OpenRelatedFileService {
         }
 
         // * Init info active documnet
-        console.debug(`Getting active file`);
         let name = path.basename(uri.fsPath);
         let relativePath = path.relative(workspaceFolder.uri.fsPath, uri.fsPath);
         let activeFile = new FileInfo(name, uri.fsPath, relativePath);
-        console.debug(`Active file >>> ${JSON.stringify(activeFile)}`);
 
         // Get configs for file filters
         let fileInfos = this.getAllFilesInCurrentWorkspace(
@@ -57,7 +55,6 @@ class OpenRelatedFileService {
         let matchResults = this.getRelatedFiles(activeFile, fileInfos);
 
         // * Sort by rule order and file name
-        console.debug(`Sorting`);
         matchResults = matchResults.sort((a, b) => {
             if (a.rule.order < b.rule.order) {
                 return -1;
@@ -90,7 +87,6 @@ class OpenRelatedFileService {
 
         // * run the build in comment to sync active document to explorer
         vscode.commands.executeCommand("workbench.files.action.showActiveFileInExplorer");
-        console.debug(`Sync active document completed`);
     }
 
     /**
@@ -99,7 +95,6 @@ class OpenRelatedFileService {
      * @param results - match results
      */
     private showQuickPick(activeFile: FileInfo, results: Array<MatchResult>) {
-        console.debug(`Showing pick dialog for ${results.length} files`);
 
         // * Convert to quick pick item
         let relatedFiles = new Array<FileInfoQuickPickItem>();
@@ -116,7 +111,6 @@ class OpenRelatedFileService {
             // * Open selected document
             if (selected) {
                 vscode.workspace.openTextDocument(selected.fileInfo.fullPath).then(document => {
-                    console.debug(`Open document >>> ${selected.fileInfo.relativePath}`);
                     vscode.window.showTextDocument(document);
                 });
             }
@@ -130,7 +124,6 @@ class OpenRelatedFileService {
      * @returns - array of match result for related files
      */
     private getRelatedFiles(activeFile: FileInfo, files: Array<FileInfo>): Array<MatchResult> {
-        console.debug(`Calculating related files`);
 
         // * Sort rules so the most important rule always match first
         let relatedFiles = new Array<MatchResult>();
@@ -168,7 +161,7 @@ class OpenRelatedFileService {
 
                     if (result.isMatch && openRelatedFileLogic.areFileInfosMatch(activeFileResult, result)) {
                         relatedFiles.push(result);
-                        console.debug(`Found match >>> ${JSON.stringify(file)}`);
+                        (`Found match >>> ${JSON.stringify(file)}`);
 
                         break;
                     }
@@ -186,8 +179,6 @@ class OpenRelatedFileService {
      * @returns - array of file info
      */
     private getAllFilesInCurrentWorkspace(fileFilters: Array<string>, ignoredFiles: Array<string>): Array<FileInfo> {
-        console.debug(`Get all files in workspace`);
-
         let results = new Array<FileInfo>();
 
         // Scan file in current workspace
@@ -204,7 +195,6 @@ class OpenRelatedFileService {
             }
         }
 
-        console.debug(`Files count >>> ${results.length}`);
         return results;
     }
 

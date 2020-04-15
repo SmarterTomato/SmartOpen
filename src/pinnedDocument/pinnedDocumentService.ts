@@ -33,8 +33,6 @@ class PinnedDocumentService {
             uri = activeTextEditor.document.uri;
         }
 
-        console.debug(`Pin document start >>> ${uri}`);
-
         // * Check whether document pinned
         if (this.findPinnedDocumentItem(uri)) {
             vscode.window.showInformationMessage(`Document already in the pinned documents`);
@@ -78,8 +76,6 @@ class PinnedDocumentService {
             uri = activeTextEditor.document.uri;
         }
 
-        console.debug(`Unpin document start >>> ${uri}`);
-
         // * Check whether document pinned
         if (!this.findPinnedDocumentItem(uri)) {
             vscode.window.showInformationMessage(`Current document not in the pinned documents`);
@@ -97,8 +93,6 @@ class PinnedDocumentService {
      * Show quick pick dialog for pinned documents
      */
     showQuickPick() {
-        console.debug(`Showing quick pick for pinned documents`);
-
         let placeHolder = `Pinned document...`;
         if (this.pinnedDocuments.length === 0) {
             placeHolder = `No document pinned...`;
@@ -122,7 +116,6 @@ class PinnedDocumentService {
             return;
         }
 
-        console.debug(`Opening document >>> ${uri.fsPath}`);
 
         vscode.workspace.openTextDocument(uri.fsPath).then(
             document => {
@@ -145,8 +138,6 @@ class PinnedDocumentService {
      * Open all pinned documents
      */
     openAll() {
-        console.debug(`Opening all documents`);
-
         for (let item of this.pinnedDocuments) {
             this.openDocument(item.uri);
         }
