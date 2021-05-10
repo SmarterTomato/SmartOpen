@@ -2,6 +2,14 @@
 
 Smart Open is a vscode extension help user better manage opened documents
 
+> This extension no longer maintained. It has been separated into few smaller extension with enhanced features. Please see the description below
+>
+> For `Sync with Explorer` feature, please search for extension `Locate This Document` (smartertomato.locate-this-document).
+>
+> For `Open Related Document` feature, please search for extension `Open Related Document` (smartertomato.open-related-documents). The new extension adds the caching for performance on large projects
+>
+> For `Pinned document` feature isn't really useful after few vscode updates
+
 ## Features
 
 ### Sync with explorer
@@ -152,11 +160,17 @@ For any issues or suggestions, contact me via following method:
 
 Email: smartertomato@gmail.com
 
-Git: [SmartOpen](https://github.com/SmarterTomato/SmartOpen/)
+GitHub: [SmartOpen GitHub](https://github.com/SmarterTomato/SmartOpen/)
 
 Send me through your configs I will make them built in.
 
 ## Release Notes
+
+## [1.6.3] - 2021-05-11
+
+## Archive
+
+- This extension is no longer maintained
 
 ## [1.6.2] - 2019-09-13
 

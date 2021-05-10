@@ -1,6 +1,6 @@
 {
-    "displayName":"SmartOpen",
-    "description": "SmartOpen is a vscode extension help user better manage opened documents",
+    "displayName":"Smart Open",
+    "description": "Smart Open is a vscode extension help user better manage opened documents",
     "contributes.views.explorer.pinnedDocument": "Pinned Documents",
 
     "contributes.commands.smartOpen.syncActiveDocument":"Sync with Explorer",

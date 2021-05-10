@@ -2,9 +2,9 @@
 	"name": "smartopen",
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "1.6.6",
+	"version": "1.6.7",
 	"engines": {
-		"vscode": "^1.32.0"
+		"vscode": "^1.55.0"
 	},
 	"publisher": "SmartyTomato",
 	"categories": [
@@ -251,17 +251,18 @@
 						"uniqueItems": true,
 						"default": [
 							"*",
+							"*.py",
 							"*.ts",
-							"*.cs",
-							"*.xml",
-							"*.h",
-							"*.cpp",
-							"*.json",
+							"*.js",
 							"*.html",
 							"*.css",
 							"*.less",
 							"*.sass",
-							"*.js"
+							"*.cs",
+							"*.xml",
+							"*.h",
+							"*.cpp",
+							"*.json"
 						],
 						"description": "(Remove) first item to Enable. Only include file name, full path and relative path with the given regexp, add this to significant reduce the calculation time"
 					},
